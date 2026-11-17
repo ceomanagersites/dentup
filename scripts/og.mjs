@@ -22,8 +22,8 @@ if (!existsSync(join(ogDir, "og-ru.html"))) {
 // Иконка: знак на ночном фоне
 writeFileSync(
   join(ogDir, "icon.html"),
-  `<!doctype html><html><body style="margin:0;width:180px;height:180px;background:#1a1320;display:grid;place-items:center">
-<svg viewBox="0 0 32 32" width="132" height="132"><path d="M5 22a11 11 0 0 1 22 0" fill="none" stroke="#f1ecf2" stroke-width="1.8" stroke-linecap="round"/><path d="M2.5 22h27" stroke="#f1ecf2" stroke-width="1.8" stroke-linecap="round"/><circle cx="21.2" cy="13.6" r="3.2" fill="#f2a15e"/></svg>
+  `<!doctype html><html><body style="margin:0;width:180px;height:180px;background:#0b1424;display:grid;place-items:center">
+<svg viewBox="0 0 32 32" width="132" height="132"><path d="M5 22a11 11 0 0 1 22 0" fill="none" stroke="#eaf2fa" stroke-width="1.8" stroke-linecap="round"/><path d="M2.5 22h27" stroke="#eaf2fa" stroke-width="1.8" stroke-linecap="round"/><circle cx="21.2" cy="13.6" r="3.2" fill="#a9d5f5"/></svg>
 </body></html>`,
   "utf8"
 );

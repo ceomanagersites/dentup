@@ -1,33 +1,33 @@
-// Dent Up: часы Ташкента на циферблате, смена темы, сборщик сообщения, меню, карта, появление блоков.
-// Контент виден и работает без скрипта; скрипт только оживляет.
+// Dent Up: часы Ташкента, тема, сцена «сутки» при прокрутке, вкладки услуг, чат записи, счётчики, бегущая строка.
+// Контент виден и работает без скрипта; скрипт только оживляет. В режиме «меньше движения» движение не включается.
 (() => {
   "use strict";
   const root = document.documentElement;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const TZ = "Asia/Tashkent";
-  const THEME_COLORS = { day: "#eeeaf0", night: "#1a1320" };
+  const THEME_COLORS = { day: "#f3f7fb", night: "#0b1424" };
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const smooth = (a, b, x) => {
+    const t = clamp((x - a) / (b - a));
+    return t * t * (3 - 2 * t);
+  };
+  const pad = (n) => String(n).padStart(2, "0");
 
-  /* ---------- Время Ташкента ---------- */
-  let fmt;
+  /* ---------- Время Ташкента и циферблат ---------- */
+  let fmt = null;
   try {
     fmt = new Intl.DateTimeFormat("en-GB", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
-  } catch {
-    fmt = null;
-  }
+  } catch {}
   const tashkentNow = () => {
     if (!fmt) {
-      // запасной вариант: UTC+5 без перехода на летнее время
       const d = new Date(Date.now() + 5 * 3600e3);
       return { h: d.getUTCHours(), m: d.getUTCMinutes() };
     }
     const parts = fmt.formatToParts(new Date());
-    const h = Number(parts.find((p) => p.type === "hour").value) % 24;
-    const m = Number(parts.find((p) => p.type === "minute").value);
-    return { h, m };
+    return { h: Number(parts.find((p) => p.type === "hour").value) % 24, m: Number(parts.find((p) => p.type === "minute").value) };
   };
-  const pad = (n) => String(n).padStart(2, "0");
 
-  /* ---------- Циферблат ---------- */
   const dial = document.querySelector(".hero .dial");
   if (dial) {
     const sun = dial.querySelector(".dial-sun");
@@ -35,58 +35,44 @@
     const clock = dial.querySelector("[data-clock]");
     const caption = dial.querySelector("[data-clock-caption]");
     const status = dial.querySelector("[data-clock-status]");
-
-    const place = (fraction) => {
-      sun.style.transform = `rotate(${(fraction * 180).toFixed(2)}deg)`;
-      progress.style.setProperty("--progress-offset", (1 - fraction).toFixed(4));
+    const place = (f) => {
+      sun.style.transform = `rotate(${(f * 180).toFixed(2)}deg)`;
+      progress.style.setProperty("--progress-offset", (1 - f).toFixed(4));
     };
-    const fractionNow = () => {
+    const now = () => {
       const { h, m } = tashkentNow();
-      return { fraction: (h + m / 60) / 24, text: `${pad(h)}:${pad(m)}` };
+      return { f: (h + m / 60) / 24, text: `${pad(h)}:${pad(m)}` };
     };
-    const tick = () => {
-      const { fraction, text } = fractionNow();
-      clock.textContent = text;
-      place(fraction);
-    };
-
-    const start = fractionNow();
+    const start = now();
     clock.textContent = start.text;
     caption.hidden = false;
     status.textContent = status.dataset.live;
-    clock.setAttribute("aria-live", "off");
-
-    if (reduce.matches) {
-      place(start.fraction);
+    if (reduce) {
+      place(start.f);
       sun.classList.add("is-on");
     } else {
-      // солнце проходит путь от полуночи до текущего часа, как восход
       place(0);
-      const duration = 1300;
-      const delay = 380;
-      const t0 = performance.now() + delay;
-      const ease = (x) => 1 - Math.pow(1 - x, 3);
-      const step = (now) => {
-        const p = Math.min(1, Math.max(0, (now - t0) / duration));
+      const t0 = performance.now() + 420;
+      const step = (t) => {
+        const p = clamp((t - t0) / 1400);
         if (p > 0) sun.classList.add("is-on");
-        place(start.fraction * ease(p));
+        place(start.f * (1 - Math.pow(1 - p, 3)));
         if (p < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
     }
-
-    // обновление на границе минуты, затем раз в минуту
-    const schedule = () => {
-      const msToMinute = 60000 - (Date.now() % 60000) + 50;
+    const tick = () => {
+      const { f, text } = now();
+      clock.textContent = text;
+      place(f);
+    };
+    const schedule = () =>
       setTimeout(() => {
         tick();
         schedule();
-      }, msToMinute);
-    };
+      }, 60000 - (Date.now() % 60000) + 50);
     schedule();
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) tick();
-    });
+    document.addEventListener("visibilitychange", () => !document.hidden && tick());
   }
 
   /* ---------- Тема ---------- */
@@ -107,30 +93,135 @@
         } catch {}
         setThemeMeta(next);
       };
-      if (!document.startViewTransition || reduce.matches) return apply();
+      if (!document.startViewTransition || reduce) return apply();
       const r = themeBtn.getBoundingClientRect();
       const x = r.left + r.width / 2;
       const y = r.top + r.height / 2;
       const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
       const vt = document.startViewTransition(apply);
+      // страховка: если браузер не отрисовывает страницу (фоновая вкладка), переход может не начаться
+      setTimeout(() => {
+        if (root.dataset.theme !== next) {
+          try {
+            vt.skipTransition();
+          } catch {}
+          apply();
+        }
+      }, 500);
       vt.ready
-        .then(() => {
+        .then(() =>
           root.animate(
             { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
-            { duration: 620, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", pseudoElement: "::view-transition-new(root)" }
-          );
-        })
+            { duration: 650, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", pseudoElement: "::view-transition-new(root)" }
+          )
+        )
         .catch(() => {});
     });
   }
 
-  /* ---------- Сборщик сообщения ---------- */
+  /* ---------- Появление при прокрутке ---------- */
+  const show = (el) => {
+    el.classList.add("is-visible");
+    if (el.matches(".stat")) countUp(el);
+  };
+  const countUp = (el) => {
+    const n = el.querySelector("[data-count]");
+    if (!n || reduce) return;
+    const target = Number(n.dataset.count);
+    const t0 = performance.now();
+    const step = (t) => {
+      const p = clamp((t - t0) / 1200);
+      n.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const io =
+    "IntersectionObserver" in window && !reduce
+      ? new IntersectionObserver(
+          (entries) =>
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                show(e.target);
+                io.unobserve(e.target);
+              }
+            }),
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+        )
+      : null;
+  document.querySelectorAll("[data-reveal]").forEach((el) => (io ? io.observe(el) : el.classList.add("is-visible")));
+
+  /* ---------- Вкладки услуг ---------- */
+  const tabsRoot = document.querySelector("[data-tabs]");
+  if (tabsRoot) {
+    const list = tabsRoot.querySelector("[data-tablist]");
+    const pill = tabsRoot.querySelector("[data-tabs-pill]");
+    const tabs = [...tabsRoot.querySelectorAll("[data-tab]")];
+    const panels = [...tabsRoot.querySelectorAll("[data-panel]")];
+    list.hidden = false;
+    tabsRoot.classList.add("tabs-on");
+    const movePill = (tab) => {
+      pill.style.width = `${tab.offsetWidth}px`;
+      pill.style.transform = `translateX(${tab.offsetLeft}px)`;
+    };
+    const select = (name, focus) => {
+      tabs.forEach((t) => {
+        const on = t.dataset.tab === name;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on) {
+          movePill(t);
+          if (focus) t.focus();
+        }
+      });
+      panels.forEach((p) => {
+        const on = p.dataset.panel === name;
+        const was = !p.hidden;
+        p.hidden = !on;
+        if (on && !was) {
+          p.querySelectorAll(".svc").forEach((c, i) => {
+            c.style.setProperty("--i", i);
+            show(c);
+          });
+          if (!reduce) {
+            p.classList.remove("is-entering");
+            void p.offsetWidth;
+            p.classList.add("is-entering");
+          }
+        }
+      });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(t.dataset.tab));
+      t.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        e.preventDefault();
+        const next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+        select(next.dataset.tab, true);
+      });
+    });
+    select("adults");
+    // плитка «Детям» во взрослой вкладке переключает на детскую
+    tabsRoot.querySelectorAll("[data-tab-go]").forEach((a) =>
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        select(a.dataset.tabGo);
+        list.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+      })
+    );
+    requestAnimationFrame(() => movePill(tabs.find((t) => t.getAttribute("aria-selected") === "true")));
+    window.addEventListener("resize", () => movePill(tabs.find((t) => t.getAttribute("aria-selected") === "true")));
+    document.fonts && document.fonts.ready.then(() => movePill(tabs.find((t) => t.getAttribute("aria-selected") === "true")));
+  }
+
+  /* ---------- Чат записи ---------- */
   const composer = document.querySelector("[data-composer]");
   if (composer) {
     const ds = composer.dataset;
     const times = JSON.parse(ds.times);
     const topics = JSON.parse(ds.topics);
     const out = composer.querySelector("[data-msg]");
+    const bubble = composer.querySelector("[data-bubble]");
     const tg = composer.querySelector('[data-send="tg"]');
     const wa = composer.querySelector('[data-send="wa"]');
     const value = (name) => {
@@ -138,7 +229,7 @@
       return el ? Number(el.value) : -1;
     };
     const lower = (s) => s.charAt(0).toLowerCase() + s.slice(1);
-    const build = () => {
+    const build = (animate) => {
       const lines = [ds.greeting];
       const topic = value("topic");
       const time = value("time");
@@ -149,54 +240,43 @@
       const q = encodeURIComponent(text);
       tg.href = `https://t.me/${ds.tg}?text=${q}`;
       wa.href = `https://wa.me/${ds.wa}?text=${q}`;
+      if (animate && !reduce) {
+        bubble.classList.remove("is-updating");
+        void bubble.offsetWidth;
+        bubble.classList.add("is-updating");
+      }
     };
-    composer.addEventListener("change", build);
-    build();
-
-    // «Записать ребёнка» сразу выбирает повод
+    composer.addEventListener("change", () => build(true));
+    build(false);
     document.querySelectorAll("[data-preset-topic]").forEach((a) =>
       a.addEventListener("click", () => {
         const input = composer.querySelector(`input[name="topic"][value="${a.dataset.presetTopic}"]`);
         if (input) {
           input.checked = true;
-          build();
+          build(true);
         }
       })
     );
   }
 
-  /* ---------- Меню на телефоне ---------- */
+  /* ---------- Меню, язык, шапка, карта ---------- */
   const menu = document.querySelector("[data-menu]");
   const openBtn = document.querySelector("[data-menu-open]");
   if (menu && openBtn && typeof menu.showModal === "function") {
     openBtn.addEventListener("click", () => menu.showModal());
     menu.querySelector("[data-menu-close]").addEventListener("click", () => menu.close());
     menu.querySelectorAll("[data-menu-link]").forEach((a) => a.addEventListener("click", () => menu.close()));
-    menu.addEventListener("click", (e) => {
-      if (e.target === menu) menu.close();
-    });
+    menu.addEventListener("click", (e) => e.target === menu && menu.close());
   }
-
-  /* ---------- Язык: остаёмся в том же разделе ---------- */
   document.querySelectorAll("[data-lang-link]").forEach((a) =>
     a.addEventListener("click", () => {
       if (location.hash) a.href = a.href.split("#")[0] + location.hash;
     })
   );
-
-  /* ---------- Шапка ---------- */
   const hdr = document.querySelector("[data-hdr]");
-  if (hdr) {
-    const onScroll = () => hdr.classList.toggle("is-scrolled", window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-  }
-
-  /* ---------- Карта по нажатию ---------- */
   const map = document.querySelector("[data-map]");
   if (map) {
-    const btn = map.querySelector("[data-map-load]");
-    btn.addEventListener("click", () => {
+    map.querySelector("[data-map-load]").addEventListener("click", () => {
       const frame = document.createElement("iframe");
       frame.src = map.dataset.src;
       frame.title = map.dataset.title;
@@ -208,22 +288,131 @@
     });
   }
 
-  /* ---------- Появление блоков ---------- */
-  const revealables = document.querySelectorAll("[data-reveal]");
-  if ("IntersectionObserver" in window && !reduce.matches) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-visible");
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { rootMargin: "0px 0px -6% 0px", threshold: 0.06 }
-    );
-    revealables.forEach((el) => io.observe(el));
-  } else {
-    revealables.forEach((el) => el.classList.add("is-visible"));
+  /* ---------- Сцена «сутки»: небо, солнце и луна идут за прокруткой ---------- */
+  const scene = document.querySelector("[data-scene]");
+  let updateScene = null;
+  if (scene && !reduce) {
+    scene.classList.add("is-live");
+    const timeEl = scene.querySelector("[data-day-time]");
+    const sunG = scene.querySelector("[data-day-sun]");
+    const moonG = scene.querySelector("[data-day-moon]");
+    const moments = [...scene.querySelectorAll("[data-moment]")];
+    const dots = [...scene.querySelectorAll("[data-dot]")];
+    // часы сцены: 06:00 → 04:00 следующего дня; каждой карточке — четверть прокрутки
+    const SEG = [6, 10.25, 16.25, 22.75, 28];
+    const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+    const SKY = [
+      [6, "#f4d6df", "#fdeee6"],
+      [8.5, "#d6e9fa", "#f6f2ee"],
+      [12, "#a9d5f5", "#e9f5fd"],
+      [16, "#b7d4f2", "#f4ece9"],
+      [19, "#8c9fd2", "#f1c8c2"],
+      [20.5, "#3b4c84", "#7f7aa3"],
+      [22, "#13234a", "#22345f"],
+      [26, "#0a1427", "#15243f"],
+      [28, "#1a2a52", "#38477a"],
+    ].map(([h, a, b]) => [h, hex(a), hex(b)]);
+    const sky = (h) => {
+      let i = 0;
+      while (i < SKY.length - 2 && h > SKY[i + 1][0]) i++;
+      const [h0, a0, b0] = SKY[i];
+      const [h1, a1, b1] = SKY[i + 1];
+      const t = clamp((h - h0) / (h1 - h0));
+      const mix = (x, y) => `rgb(${x.map((v, k) => Math.round(lerp(v, y[k], t))).join(",")})`;
+      return [mix(a0, a1), mix(b0, b1)];
+    };
+    let active = -1;
+    updateScene = () => {
+      const r = scene.getBoundingClientRect();
+      const total = r.height - innerHeight;
+      const p = clamp(-r.top / total);
+      const seg = Math.min(3, Math.floor(p * 4));
+      const local = p * 4 - seg;
+      const h = lerp(SEG[seg], SEG[seg + 1], local);
+      const [top, bottom] = sky(h);
+      const night = smooth(19, 21.2, h);
+      scene.style.setProperty("--sky-top", top);
+      scene.style.setProperty("--sky-bottom", bottom);
+      scene.style.setProperty("--night", night.toFixed(3));
+      scene.classList.toggle("is-dark", night > 0.5);
+      sunG.style.transform = `rotate(${(clamp((h - 6) / 14) * 180).toFixed(2)}deg)`;
+      moonG.style.transform = `rotate(${(clamp((h - 19.5) / 8.5) * 180).toFixed(2)}deg)`;
+      const mins = Math.floor(((h % 24) * 60) / 10) * 10;
+      timeEl.textContent = `${pad(Math.floor(mins / 60))}:${pad(mins % 60)}`;
+      if (seg !== active) {
+        active = seg;
+        moments.forEach((m, i) => m.classList.toggle("is-active", i === seg));
+        dots.forEach((d, i) => d.classList.toggle("is-active", i === seg));
+      }
+    };
+  }
+
+  /* ---------- Бегущая строка: быстрее при прокрутке, направление — за прокруткой ---------- */
+  const mq = document.querySelector("[data-mq-track]");
+  let mqX = 0;
+  let mqDir = -1;
+  let mqBoost = 0;
+
+  /* ---------- Один цикл прокрутки на всё ---------- */
+  const bar = document.querySelector("[data-progress]");
+  const stepsWrap = document.querySelector("[data-steps]");
+  const stepsLine = document.querySelector("[data-steps-line]");
+  const ring = document.querySelector("[data-spin]");
+  const rise = document.querySelector("[data-rise]");
+  const aura = document.querySelector(".hero-aura");
+  let lastY = scrollY;
+  let ticking = false;
+  const onScroll = () => {
+    const y = scrollY;
+    const dy = y - lastY;
+    lastY = y;
+    if (hdr) hdr.classList.toggle("is-scrolled", y > 8);
+    if (bar) bar.style.transform = `scaleX(${clamp(y / (document.documentElement.scrollHeight - innerHeight)).toFixed(4)})`;
+    if (reduce) return;
+    if (dy) {
+      mqDir = dy > 0 ? -1 : 1;
+      mqBoost = Math.min(14, mqBoost + Math.abs(dy) * 0.08);
+    }
+    if (updateScene) updateScene();
+    if (stepsWrap && stepsLine) {
+      const r = stepsWrap.getBoundingClientRect();
+      stepsLine.parentElement.parentElement.style.setProperty("--steps", clamp((innerHeight * 0.7 - r.top) / r.height).toFixed(3));
+    }
+    if (ring) {
+      const r = ring.getBoundingClientRect();
+      ring.style.setProperty("--spin", `${((clamp((innerHeight - r.top) / (innerHeight + r.height)) - 0.5) * 120).toFixed(1)}deg`);
+    }
+    if (rise) {
+      const r = rise.parentElement.getBoundingClientRect();
+      rise.style.setProperty("--rise", `${(clamp(1 - (innerHeight - r.top) / innerHeight) * 40).toFixed(1)}%`);
+    }
+    if (aura && y < innerHeight) aura.style.transform = `translateY(${(y * 0.25).toFixed(1)}px)`;
+  };
+  const requestTick = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      onScroll();
+    });
+  };
+  window.addEventListener("scroll", requestTick, { passive: true });
+  window.addEventListener("resize", requestTick);
+  onScroll();
+
+  if (mq && !reduce) {
+    const row = mq.firstElementChild;
+    let last = performance.now();
+    const frame = (t) => {
+      const dt = Math.min(64, t - last);
+      last = t;
+      const w = row.offsetWidth;
+      mqX += mqDir * (0.04 + mqBoost * 0.06) * dt;
+      mqBoost *= 0.92;
+      if (w) mqX = ((mqX % w) + w) % w - w;
+      mq.style.transform = `translate3d(${mqX.toFixed(1)}px,0,0)`;
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
   }
 })();

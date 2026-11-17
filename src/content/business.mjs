@@ -14,8 +14,8 @@ export const business = {
   // CONFIRM: в 2ГИС у клиники нет WhatsApp. Кнопка ведёт на основной номер — проверить, что он есть в WhatsApp.
   whatsapp: "998888788788",
 
-  // Личный Telegram врача (запись), публичный канал клиники.
-  telegram: "toshkent_stomatolog_sirojiddin",
+  // Личный Telegram врача — сюда приходят все записи с сайта (подтвердил владелец проекта 18.11.2026). Канал клиники — отдельно.
+  telegram: "Toshkent_Stomatolog_Sirojiddin",
   telegramChannel: "toshkent_stomatolog",
 
   // Instagram клиники @dentup_kids (активный). В 2ГИС указан @dentupclinic, он недоступен — стоит обновить карточку.
