@@ -62,6 +62,12 @@ node scripts/serve.mjs
 
 ## Публикация
 
+**Черновик для показа:** https://ceomanagersites.github.io/dentup/ (узбекская версия — `/dentup/uz/`). Репозиторий
+https://github.com/ceomanagersites/dentup. Каждый `git push` в `main` пересобирает и публикует черновик через GitHub
+Actions (`.github/workflows/pages.yml`) примерно за минуту. Черновик закрыт от поисковиков (`NOINDEX=1` в workflow).
+
+Когда у клиники появится домен, сайт переезжает на обычный хостинг:
+
 1. Соберите с адресом сайта, чтобы появились canonical, hreflang, картинки для соцсетей и sitemap:
 
    ```bash
