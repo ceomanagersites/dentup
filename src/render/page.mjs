@@ -195,37 +195,64 @@ const implantArt = `<svg class="implant-art" viewBox="0 0 220 260" aria-hidden="
   <path class="ia-gum" d="M8 150c24-12 42 12 66 0s42 12 66 0 42 12 66 0"/>
 </svg>`;
 
+// Небо для каждой карточки времени: заранее нарисованная картинка, ничего не мигает.
+const SKIES = [
+  { top: "#f6dbe2", bottom: "#fdf0e8", deg: 30, body: "sun", lit: 0 },
+  { top: "#a9d5f5", bottom: "#eaf5fd", deg: 92, body: "sun", lit: 0 },
+  { top: "#9aa9d8", bottom: "#f3cfc6", deg: 158, body: "sun", lit: 0.5 },
+  { top: "#0d1a36", bottom: "#1d2e55", deg: 118, body: "moon", lit: 1 },
+];
+const CITY =
+  "M0 160V140h18v-10h22v10h16v-18h24v18h12v-13h26v13h15v-21h24v21h19v-12h24v12h16v-16h28v16h21v-8h20v8h24v-14h11V160Z";
+const WINDOWS = [[22, 134], [30, 134], [60, 126], [68, 126], [60, 134], [98, 131], [122, 123], [130, 123], [122, 131], [160, 132], [184, 128], [190, 135], [220, 128], [228, 128], [250, 134], [292, 130], [300, 130]];
+const STARS = [[30, 24, 1.2], [70, 46, 0.8], [112, 18, 1], [150, 54, 0.8], [196, 28, 1.3], [236, 50, 0.9], [270, 20, 1], [300, 58, 0.8], [58, 80, 0.7], [250, 86, 0.7]];
+
+function skyArt(i) {
+  const k = SKIES[i];
+  const windows = WINDOWS.filter((_, n) => (k.lit === 1 ? true : k.lit > 0 ? n % 2 === 0 : false))
+    .map(([x, y]) => `<rect x="${x}" y="${y}" width="4" height="5" rx="0.8"/>`)
+    .join("");
+  const stars = k.body === "moon" ? STARS.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}"/>`).join("") : "";
+  const body =
+    k.body === "sun"
+      ? `<circle class="tsky-halo" cx="40" cy="160" r="22"/><circle class="tsky-sun" cx="40" cy="160" r="11"/>`
+      : `<path class="tsky-moon" d="M42 147a13 13 0 1 0 7 21 10 10 0 1 1-7-21Z"/>`;
+  return `<svg class="tsky" viewBox="0 0 320 180" aria-hidden="true" focusable="false">
+    <defs><linearGradient id="tsky-${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${k.top}"/><stop offset="1" stop-color="${k.bottom}"/></linearGradient></defs>
+    <rect width="320" height="180" fill="url(#tsky-${i})"/>
+    ${stars ? `<g class="tsky-stars">${stars}</g>` : ""}
+    <path class="tsky-arc" d="M40 160A120 120 0 0 1 280 160"/>
+    <g class="tsky-body" style="--deg:${k.deg}deg">${body}</g>
+    <path class="tsky-city" d="${CITY}"/>
+    <rect class="tsky-city tsky-ground" x="0" y="160" width="320" height="20"/>
+    ${windows ? `<g class="tsky-windows">${windows}</g>` : ""}
+  </svg>`;
+}
+
 function dayScene(d) {
   const s = d.scene;
   const L = d.lang;
-  return `<section class="day" id="day" aria-labelledby="day-title" data-scene>
-  <div class="day-sticky">
-    <div class="day-sky" aria-hidden="true"></div>
-    <div class="day-stars" aria-hidden="true"></div>
-    <div class="wrap day-in">
-      <div class="day-copy">
-        <h2 class="h2" id="day-title">${tx(s.title, L)}</h2>
-        <p class="day-lede">${tx(s.lede, L)}</p>
-        <p class="day-time" aria-hidden="true"><span data-day-time>${esc(s.moments[0].time)}</span></p>
-        <ol class="moments">${s.moments
-          .map(
-            (m, i) =>
-              `<li class="moment${i === 0 ? " is-active" : ""}" data-moment="${i}"><span class="moment-ic">${ic(m.icon, 24)}</span><div><p class="moment-time">${esc(m.time)}</p><h3 class="moment-t">${tx(m.t, L)}</h3><p class="moment-d">${tx(m.d, L)}</p></div></li>`
-          )
-          .join("")}</ol>
-        <a class="btn btn-accent" href="#book">${esc(s.cta)}<span class="btn-arrow">${icons.arrow}</span></a>
-      </div>
-      <div class="day-stage">
-        <svg class="day-svg" viewBox="0 0 600 340" aria-hidden="true" focusable="false">
-          <path class="day-arc" d="M40 300A260 260 0 0 1 560 300"/>
-          <g class="day-body" data-day-sun><circle class="day-halo" cx="40" cy="300" r="34"/><circle class="day-sun" cx="40" cy="300" r="16"/></g>
-          <g class="day-body" data-day-moon><path class="day-moon" d="M44 284a17 17 0 1 0 8 26 13 13 0 1 1-8-26Z"/></g>
-          <line class="day-horizon" x1="0" y1="300" x2="600" y2="300"/>
-          <g class="day-skyline"><path d="M0 300V262h34v-18h40v18h30v-34h46v34h22v-24h50v24h28v-40h44v40h36v-22h46v22h30v-30h52v30h40v-16h38v16h44v-26h20v64Z"/><g class="day-windows"><rect x="44" y="252" width="6" height="8" rx="1"/><rect x="58" y="252" width="6" height="8" rx="1"/><rect x="112" y="240" width="6" height="8" rx="1"/><rect x="126" y="240" width="6" height="8" rx="1"/><rect x="112" y="254" width="6" height="8" rx="1"/><rect x="170" y="262" width="6" height="8" rx="1"/><rect x="222" y="240" width="6" height="8" rx="1"/><rect x="236" y="240" width="6" height="8" rx="1"/><rect x="222" y="254" width="6" height="8" rx="1"/><rect x="304" y="268" width="6" height="8" rx="1"/><rect x="332" y="252" width="6" height="8" rx="1"/><rect x="346" y="252" width="6" height="8" rx="1"/><rect x="332" y="266" width="6" height="8" rx="1"/><rect x="410" y="256" width="6" height="8" rx="1"/><rect x="424" y="256" width="6" height="8" rx="1"/><rect x="468" y="262" width="6" height="8" rx="1"/><rect x="482" y="262" width="6" height="8" rx="1"/><rect x="522" y="276" width="6" height="8" rx="1"/><rect x="560" y="264" width="6" height="8" rx="1"/></g></g>
-        </svg>
-        <div class="day-dots" role="group" aria-label="${esc(s.pick)}">${s.moments.map((m, i) => `<button type="button" class="day-dot" data-goto="${i}" aria-pressed="${i === 0}"><span>${esc(m.time)}</span></button>`).join("")}</div>
+  return `<section class="times section" id="day" aria-labelledby="day-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 class="h2" id="day-title" data-reveal="mask"><span class="mask-in">${tx(s.title, L)}</span></h2>
+        <p class="lede" data-reveal>${tx(s.lede, L)}</p>
       </div>
     </div>
+    <ol class="times-grid">${s.moments
+      .map(
+        (m, i) => `<li class="tcard${i === 3 ? " tcard-night" : ""}" data-reveal style="--reveal-delay:${i * 90}ms">
+        ${skyArt(i)}
+        <div class="tcard-body">
+          <p class="tcard-time"><span class="tcard-ic">${ic(m.icon, 18)}</span>${esc(m.time)}</p>
+          <h3 class="tcard-t">${tx(m.t, L)}</h3>
+          <p class="tcard-d">${tx(m.d, L)}</p>
+          <a class="tcard-link" href="#book" data-preset-time="${m.chip}">${esc(s.cardCta)}<span class="svc-arrow">${icons.arrow}</span></a>
+        </div>
+      </li>`
+      )
+      .join("")}</ol>
   </div>
 </section>`;
 }

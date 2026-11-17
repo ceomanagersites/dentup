@@ -248,15 +248,19 @@
     };
     composer.addEventListener("change", () => build(true));
     build(false);
-    document.querySelectorAll("[data-preset-topic]").forEach((a) =>
-      a.addEventListener("click", () => {
-        const input = composer.querySelector(`input[name="topic"][value="${a.dataset.presetTopic}"]`);
-        if (input) {
-          input.checked = true;
-          build(true);
-        }
-      })
-    );
+    // кнопки «Записаться» в услугах и карточках времени сразу выбирают повод или время в чате
+    const preset = (selector, name, key) =>
+      document.querySelectorAll(selector).forEach((a) =>
+        a.addEventListener("click", () => {
+          const input = composer.querySelector(`input[name="${name}"][value="${a.dataset[key]}"]`);
+          if (input) {
+            input.checked = true;
+            build(true);
+          }
+        })
+      );
+    preset("[data-preset-topic]", "topic", "presetTopic");
+    preset("[data-preset-time]", "time", "presetTime");
   }
 
   /* ---------- Меню, язык, шапка, карта ---------- */
@@ -288,102 +292,6 @@
     });
   }
 
-  /* ---------- Сцена «сутки» ----------
-     Блок не удерживает прокрутку: страница листается как обычно. Пока блок проезжает через экран, сутки идут
-     с 06:00 до 02:30. Кнопки времени под дугой переводят сцену в нужный момент; следующая прокрутка возвращает
-     сцену к времени по положению на экране. Время всегда плавно догоняет цель. */
-  const scene = document.querySelector("[data-scene]");
-  let updateScene = null;
-  if (scene && !reduce) {
-    scene.classList.add("is-live");
-    const timeEl = scene.querySelector("[data-day-time]");
-    const sunG = scene.querySelector("[data-day-sun]");
-    const moonG = scene.querySelector("[data-day-moon]");
-    const moments = [...scene.querySelectorAll("[data-moment]")];
-    const dots = [...scene.querySelectorAll("[data-goto]")];
-    const MOMENT_H = [7.5, 13, 19.5, 26];
-    const START = 6;
-    const END = 26.5;
-    const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-    const SKY = [
-      [6, "#f4d6df", "#fdeee6"],
-      [8.5, "#d6e9fa", "#f6f2ee"],
-      [12, "#a9d5f5", "#e9f5fd"],
-      [16, "#b7d4f2", "#f4ece9"],
-      [19, "#8c9fd2", "#f1c8c2"],
-      [20.5, "#3b4c84", "#7f7aa3"],
-      [22, "#13234a", "#22345f"],
-      [26, "#0a1427", "#15243f"],
-      [28, "#1a2a52", "#38477a"],
-    ].map(([h, a, b]) => [h, hex(a), hex(b)]);
-    const sky = (h) => {
-      let i = 0;
-      while (i < SKY.length - 2 && h > SKY[i + 1][0]) i++;
-      const [h0, a0, b0] = SKY[i];
-      const [h1, a1, b1] = SKY[i + 1];
-      const t = clamp((h - h0) / (h1 - h0));
-      const mix = (x, y) => `rgb(${x.map((v, k) => Math.round(lerp(v, y[k], t))).join(",")})`;
-      return [mix(a0, a1), mix(b0, b1)];
-    };
-    const momentOf = (h) => (h < 10.25 ? 0 : h < 16.25 ? 1 : h < 22.75 ? 2 : 3);
-    let active = -1;
-    const render = (h) => {
-      const [top, bottom] = sky(h);
-      const night = smooth(19, 21.2, h);
-      scene.style.setProperty("--sky-top", top);
-      scene.style.setProperty("--sky-bottom", bottom);
-      scene.style.setProperty("--night", night.toFixed(3));
-      scene.classList.toggle("is-dark", night > 0.5);
-      sunG.style.transform = `rotate(${(clamp((h - 6) / 14) * 180).toFixed(2)}deg)`;
-      moonG.style.transform = `rotate(${(clamp((h - 19.5) / 8) * 180).toFixed(2)}deg)`;
-      const mins = Math.floor(((h % 24) * 60) / 10) * 10;
-      timeEl.textContent = `${pad(Math.floor(mins / 60))}:${pad(mins % 60)}`;
-      const m = momentOf(h);
-      if (m !== active) {
-        active = m;
-        moments.forEach((el, i) => el.classList.toggle("is-active", i === m));
-        dots.forEach((b, i) => b.setAttribute("aria-pressed", String(i === m)));
-      }
-    };
-    // положение блока на экране → час: центр блока у нижней части экрана — утро, у верхней — ночь
-    const scrollHour = () => {
-      const r = scene.getBoundingClientRect();
-      const center = r.top + r.height / 2;
-      const p = clamp((innerHeight * 0.85 - center) / (innerHeight * 0.7));
-      return lerp(START, END, p);
-    };
-    let current = scrollHour();
-    let target = current;
-    let manual = null; // { hour, y }: выбор кнопкой держится, пока страницу не прокрутят заметно
-    let running = false;
-    const loop = () => {
-      const diff = target - current;
-      current = Math.abs(diff) < 0.01 ? target : current + diff * 0.14;
-      render(current);
-      if (current !== target) requestAnimationFrame(loop);
-      else running = false;
-    };
-    const go = () => {
-      if (!running) {
-        running = true;
-        requestAnimationFrame(loop);
-      }
-    };
-    dots.forEach((b, i) =>
-      b.addEventListener("click", () => {
-        manual = { hour: MOMENT_H[i], y: scrollY };
-        target = manual.hour;
-        go();
-      })
-    );
-    updateScene = () => {
-      if (manual && Math.abs(scrollY - manual.y) > innerHeight * 0.12) manual = null;
-      target = manual ? manual.hour : scrollHour();
-      go();
-    };
-    render(current);
-  }
-
   /* ---------- Бегущая строка: быстрее при прокрутке, направление — за прокруткой ---------- */
   const mq = document.querySelector("[data-mq-track]");
   let mqX = 0;
@@ -410,7 +318,6 @@
       mqDir = dy > 0 ? -1 : 1;
       mqBoost = Math.min(14, mqBoost + Math.abs(dy) * 0.08);
     }
-    if (updateScene) updateScene();
     if (stepsWrap && stepsLine) {
       const r = stepsWrap.getBoundingClientRect();
       stepsLine.parentElement.parentElement.style.setProperty("--steps", clamp((innerHeight * 0.7 - r.top) / r.height).toFixed(3));

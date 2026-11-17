@@ -842,7 +842,6 @@ p {
 .svc-ic,
 .step-ic,
 .kp-ic,
-.moment-ic,
 .consult-ic,
 .faq-aside-ic,
 .visit-pin,
@@ -1191,6 +1190,17 @@ p {
     justify-items: start;
   }
 }
+@media (max-width: 420px) {
+  .consult {
+    padding: 22px 18px;
+  }
+  .consult .btn {
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+    padding: 12px 18px;
+  }
+}
 @media (max-width: 600px) {
   .svc-grid {
     grid-template-columns: 1fr;
@@ -1218,251 +1228,174 @@ p {
   }
 }
 
-/* ---------- 9. Сцена «сутки» ---------- */
-.day {
-  position: relative;
-  --sky-top: #f6dde3;
-  --sky-bottom: #fdf1ea;
-  --night: 0;
-  --scene-ink: #12223a;
-  --scene-muted: #3e5470;
-  color: var(--scene-ink);
-}
-.day-sticky {
-  position: relative;
-  overflow: hidden;
-  padding-block: var(--section);
-}
-/* блок обычной высоты и не удерживает прокрутку: сутки идут, пока он проезжает по экрану */
-.day.is-live .day-sticky {
-  min-height: min(100svh, 860px);
-  display: grid;
-  align-items: center;
-}
-.day-sky {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
-}
-.day-stars {
-  position: absolute;
-  inset: 0 0 35% 0;
-  opacity: var(--night);
-  background-image: radial-gradient(1.5px 1.5px at 12% 22%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 28% 12%, #fff 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 44% 30%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 63% 16%, #fff 50%, transparent 51%),
-    radial-gradient(2px 2px at 78% 26%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 90% 10%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 8% 48%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 54% 8%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 36% 44%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 86% 42%, #fff 50%, transparent 51%);
-}
-.day-in {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  align-items: center;
-  gap: 40px;
-}
-.day-copy {
-  display: grid;
-  gap: 16px;
-  justify-items: start;
-}
-.day-copy .h2 {
-  color: var(--scene-ink);
-}
-.day-lede {
-  color: var(--scene-muted);
-  font-size: var(--step-1);
-  max-width: 30em;
-}
-.day-time {
-  font: 200 clamp(3.6rem, 2rem + 6vw, 7.5rem) / 1 var(--font-text);
-  letter-spacing: -0.05em;
-  font-feature-settings: "tnum" 1;
-}
-.moments {
-  display: grid;
-  width: min(100%, 460px);
-}
-.moment {
-  grid-area: 1 / 1;
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  padding: 20px 22px;
-  border-radius: var(--r-card);
-  background: rgba(255, 255, 255, calc(0.62 - var(--night) * 0.52));
-  border: 1px solid rgba(255, 255, 255, calc(0.7 - var(--night) * 0.55));
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  opacity: 0;
-  transform: translateY(16px) scale(0.98);
-  transition: opacity 420ms var(--ease-out), transform 520ms var(--ease-out);
-}
-.moment.is-active {
-  opacity: 1;
-  transform: none;
-}
-.moment-ic {
-  width: 48px;
-  height: 48px;
-  background: rgba(169, 213, 245, 0.45);
-  color: var(--scene-ink);
-}
-.moment-time {
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: var(--scene-muted);
-  font-feature-settings: "tnum" 1;
-}
-.moment-t {
-  font: 800 1.15rem / 1.3 var(--font-text);
-}
-.moment-d {
-  margin-top: 2px;
-  color: var(--scene-muted);
-}
-.day-stage {
-  position: relative;
-}
-.day-svg {
-  width: 100%;
-  overflow: visible;
-}
-.day-arc {
-  fill: none;
-  stroke: currentColor;
-  stroke-opacity: 0.35;
-  stroke-width: 1.5;
-  stroke-dasharray: 4 8;
-}
-.day-horizon {
-  stroke: currentColor;
-  stroke-opacity: 0.3;
-}
-.day-body {
-  transform-box: view-box;
-  transform-origin: 300px 300px;
-}
-.day-halo {
-  fill: rgba(255, 255, 255, 0.55);
-  opacity: calc(1 - var(--night));
-}
-.day-windows rect {
-  fill: #ffe7a3;
-  opacity: calc(var(--night) * 0.9);
-}
-.day-sun {
-  fill: #fff6d8;
-  stroke: #f9d77e;
-  stroke-width: 3;
-  opacity: calc(1 - var(--night));
-}
-.day-moon {
-  fill: #eaf2fa;
-  opacity: var(--night);
-}
-.day-skyline path {
-  fill: currentColor;
-  fill-opacity: 0.07;
-}
-.day-dots {
+/* ---------- 9. Время приёма: четыре окна в сутки ----------
+   Небо в каждой карточке нарисовано заранее и не меняется при прокрутке.
+   Единственное движение — карточки мягко появляются, а солнце или луна один раз медленно встаёт на место. */
+.times-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.tcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out);
+}
+.tsky {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.tsky-arc {
+  fill: none;
+  stroke: #12223a;
+  stroke-opacity: 0.22;
+  stroke-width: 1.2;
+  stroke-dasharray: 3 6;
+}
+.tsky-body {
+  transform-box: view-box;
+  transform-origin: 160px 160px;
+  transform: rotate(var(--deg));
+}
+.tsky-halo {
+  fill: rgba(255, 255, 255, 0.6);
+}
+.tsky-sun {
+  fill: #fff6d8;
+  stroke: #f5cf73;
+  stroke-width: 2.5;
+}
+.tsky-moon {
+  fill: #eef4fb;
+}
+.tsky-stars circle {
+  fill: #fff;
+  opacity: 0.85;
+}
+.tsky-city {
+  fill: #12223a;
+  fill-opacity: 0.08;
+}
+.tsky-windows rect {
+  fill: #ffe39a;
+}
+.tcard-night .tsky-arc {
+  stroke: #eef5fb;
+  stroke-opacity: 0.28;
+}
+.tcard-night .tsky-city {
+  fill: #2a3d66;
+  fill-opacity: 1;
+}
+.tcard-body {
+  display: flex;
+  flex-direction: column;
   gap: 6px;
-  margin-top: 18px;
-  padding: 5px;
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, calc(0.5 - var(--night) * 0.4));
-  border: 1px solid rgba(255, 255, 255, calc(0.65 - var(--night) * 0.5));
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  flex: 1;
+  padding: 20px 22px 18px;
 }
-.day-dot {
-  min-height: 44px;
-  padding: 0 8px;
-  border: 0;
-  border-radius: var(--r-pill);
-  background: transparent;
-  color: var(--scene-ink);
-  font: 800 0.92rem / 1 var(--font-text);
+.tcard-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 300 2rem / 1 var(--font-text);
+  letter-spacing: -0.04em;
   font-feature-settings: "tnum" 1;
-  opacity: 0.6;
-  cursor: pointer;
-  transition: background-color 260ms ease, color 260ms ease, opacity 260ms ease, transform 160ms var(--ease-out);
-  -webkit-tap-highlight-color: transparent;
 }
-.day-dot:active {
-  transform: scale(0.95);
+.tcard-ic {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
 }
-.day-dot[aria-pressed="true"] {
-  opacity: 1;
-  background: var(--accent);
-  color: var(--accent-ink);
-  box-shadow: 0 8px 20px -10px rgba(47, 134, 204, 0.7);
+.tcard-t {
+  margin-top: 6px;
+  font: 800 1.08rem / 1.3 var(--font-text);
 }
-@media (hover: hover) and (pointer: fine) {
-  .day-dot:hover {
-    opacity: 1;
-  }
+.tcard-d {
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.5;
 }
-.day.is-dark {
-  --scene-ink: #eef5fb;
-  --scene-muted: #b8c9dd;
+.tcard-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+  min-height: 44px;
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--accent-strong);
+  text-decoration: none;
 }
-.day.is-dark .moment-ic {
+.tcard-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+/* ночная карточка тёмная в обеих темах */
+.tcard-night {
+  background: #0f1d3d;
+  border-color: rgba(234, 242, 250, 0.12);
   color: #eef5fb;
 }
-@media (max-width: 900px) {
-  .day-in {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .day-stage {
-    order: -1;
-    width: min(100%, 420px);
-    margin-inline: auto;
-  }
-  .day-copy {
-    gap: 10px;
-  }
-  .day-copy .h2 {
-    font-size: clamp(1.7rem, 1.2rem + 2vw, 2.4rem);
-  }
-  .day-time {
-    font-size: clamp(3rem, 2rem + 5vw, 4.5rem);
-  }
+.tcard-night .tcard-d {
+  color: #b8c9dd;
 }
-@media (max-height: 700px) and (max-width: 900px) {
-  .day-stage {
-    width: min(100%, 300px);
+.tcard-night .tcard-ic {
+  background: rgba(169, 213, 245, 0.16);
+  color: #a9d5f5;
+}
+.tcard-night .tcard-link {
+  color: #a9d5f5;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tcard:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+  .tcard:hover .svc-arrow {
+    transform: translateX(5px);
   }
 }
-/* без скрипта и в режиме «меньше движения» сцена превращается в четыре карточки */
-.day:not(.is-live) .moments {
-  width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
+@media (max-width: 1080px) {
+  .times-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
-.day:not(.is-live) .moment {
-  grid-area: auto;
-  opacity: 1;
-  transform: none;
-}
-.day:not(.is-live) .day-time,
-.day:not(.is-live) .day-dots {
-  display: none;
-}
-.day:not(.is-live) .day-in {
-  grid-template-columns: 1fr;
-}
-.day:not(.is-live) .day-stage {
-  width: min(100%, 520px);
-}
-.day:not(.is-live) [data-day-sun] {
-  transform: rotate(70deg);
-}
-.day:not(.is-live) [data-day-moon] {
-  display: none;
+/* на телефоне — лента, которую листают пальцем вбок */
+@media (max-width: 640px) {
+  .times-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 80%;
+    gap: 12px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 4px var(--gutter) 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .times-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .tcard {
+    scroll-snap-align: start;
+  }
 }
 
 /* ---------- 10. Запись ---------- */
@@ -2585,23 +2518,23 @@ p {
   }
 
   /* появление при прокрутке */
+  /* появление сдвигает через translate, а подъём при наведении — через transform: эффекты не мешают друг другу */
   .js [data-reveal] {
     opacity: 0;
-    transform: translateY(26px);
-    transition: opacity 700ms var(--ease-out), transform 800ms var(--ease-out);
-    transition-delay: var(--reveal-delay, 0ms);
+    translate: 0 26px;
+    transition: opacity 700ms var(--ease-out) var(--reveal-delay, 0ms), translate 800ms var(--ease-out) var(--reveal-delay, 0ms);
   }
   .js [data-reveal].is-visible {
     opacity: 1;
-    transform: none;
+    translate: none;
   }
-  .js .svc[data-reveal].is-visible {
-    transition: opacity 700ms var(--ease-out), transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out), border-color 300ms ease;
-    transition-delay: 0ms;
+  .js :is(.svc, .tcard)[data-reveal] {
+    transition: opacity 700ms var(--ease-out) var(--reveal-delay, 0ms), translate 800ms var(--ease-out) var(--reveal-delay, 0ms),
+      transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out), border-color 300ms ease;
   }
   .js [data-reveal="mask"] {
     opacity: 1;
-    transform: none;
+    translate: none;
   }
   /* шторка обрезает внутренний слой: сам заголовок остаётся видимым для наблюдателя */
   .js [data-reveal="mask"] > .mask-in {
@@ -2637,6 +2570,16 @@ p {
   }
   .js .svc-feature.is-visible .ia-line {
     stroke-dashoffset: 0;
+  }
+  .js .tcard[data-reveal] .tsky-body {
+    transform: rotate(calc(var(--deg) - 26deg));
+    opacity: 0;
+    transition: transform 1800ms var(--ease-out), opacity 900ms ease;
+    transition-delay: calc(var(--reveal-delay, 0ms) + 250ms);
+  }
+  .js .tcard[data-reveal].is-visible .tsky-body {
+    transform: rotate(var(--deg));
+    opacity: 1;
   }
   .js .svc-feature .ia-glow {
     transform-box: fill-box;

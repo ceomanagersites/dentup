@@ -63,15 +63,14 @@ export default {
 
   scene: {
     title: "Sizga qulay vaqtda keling",
-    lede: "Sahifani varaqlang yoki vaqtni bosing: klinika ertalab ham, tunda ham oldindan yozilish orqali qabul qiladi.",
-    pick: "Sutka vaqtini tanlash",
+    lede: "Klinika sutkaning istalgan vaqtida oldindan yozilish orqali qabul qiladi. Qulay vaqtni tanlang — uni shifokorga xabarga qoʻshamiz.",
     moments: [
-      { time: "07:30", icon: "sunrise", t: "Ishdan oldin", d: "Erta tongga yoziling va ishga ulguring." },
-      { time: "13:00", icon: "sun", t: "Tushlik tanaffusida", d: "Tanaffus paytida konsultatsiya yoki koʻrik." },
-      { time: "19:30", icon: "sunset", t: "Ishdan keyin", d: "Ishdan javob soʻrashning hojati yoʻq: kechqurun keling." },
-      { time: "02:00", icon: "moon", t: "Tunda ogʻrisa", d: "Istalgan vaqtda qoʻngʻiroq qiling — qachon kelishni kelishib olamiz." },
+      { time: "07:30", chip: 1, icon: "sunrise", t: "Ishdan oldin", d: "Erta tongga yoziling va ishga ulguring." },
+      { time: "13:00", chip: 2, icon: "sun", t: "Tushlik tanaffusida", d: "Tanaffus paytida konsultatsiya yoki koʻrik." },
+      { time: "19:30", chip: 3, icon: "sunset", t: "Ishdan keyin", d: "Ishdan javob soʻrashning hojati yoʻq: kechqurun keling." },
+      { time: "02:00", chip: 4, icon: "moon", t: "Tunda ogʻrisa", d: "Istalgan vaqtda qoʻngʻiroq qiling — qachon kelishni kelishib olamiz." },
     ],
-    cta: "Vaqtni tanlash",
+    cardCta: "Shu vaqtga yozilish",
   },
 
   book: {
