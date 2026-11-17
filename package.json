@@ -1,0 +1,14 @@
+{
+  "name": "dentup-site",
+  "private": true,
+  "description": "Сайт стоматологии Dent Up, Чиланзар, Ташкент. Статичная сборка без зависимостей.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs",
+    "og": "node scripts/og.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
