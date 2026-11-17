@@ -573,11 +573,14 @@ p {
 }
 
 .hero-dial {
-  margin-top: clamp(28px, 5vh, 56px);
+  margin-top: clamp(20px, 3vh, 40px);
 }
 .dial {
   position: relative;
-  width: min(100%, 980px, max(320px, calc((100svh - 420px) * 1.92)));
+  container-type: inline-size;
+  /* циферблат вместе с часами помещается в первый экран ноутбука: над ним около 500 px заголовка и кнопок,
+     высота полукруга — 0,52 ширины */
+  width: min(100%, 980px, max(320px, calc((100svh - 520px) * 1.92)));
   margin-inline: auto;
 }
 .dial-svg {
@@ -615,12 +618,12 @@ p {
 }
 .dial-num {
   fill: var(--ink);
-  font: 300 30px var(--font-display);
+  font: 300 34px var(--font-display);
   letter-spacing: -0.02em;
 }
 .dial-part {
   fill: var(--muted);
-  font: 400 24px var(--font-text);
+  font: 400 28px var(--font-text);
   letter-spacing: 0.01em;
 }
 .dial-horizon {
@@ -659,7 +662,8 @@ p {
   font-size: var(--step--1);
 }
 .dial-time {
-  font-size: clamp(2.6rem, 1rem + 7vw, 7rem);
+  /* часы растут вместе с циферблатом, а не с окном: не налезают на цифры 06, 12, 18 */
+  font-size: clamp(2.4rem, 14cqi, 7rem);
   line-height: 1;
   font-weight: 200;
   letter-spacing: -0.05em;
