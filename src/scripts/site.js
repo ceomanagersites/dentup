@@ -288,7 +288,10 @@
     });
   }
 
-  /* ---------- Сцена «сутки»: небо, солнце и луна идут за прокруткой ---------- */
+  /* ---------- Сцена «сутки» ----------
+     Блок не удерживает прокрутку: страница листается как обычно. Пока блок проезжает через экран, сутки идут
+     с 06:00 до 02:30. Кнопки времени под дугой переводят сцену в нужный момент; следующая прокрутка возвращает
+     сцену к времени по положению на экране. Время всегда плавно догоняет цель. */
   const scene = document.querySelector("[data-scene]");
   let updateScene = null;
   if (scene && !reduce) {
@@ -297,10 +300,10 @@
     const sunG = scene.querySelector("[data-day-sun]");
     const moonG = scene.querySelector("[data-day-moon]");
     const moments = [...scene.querySelectorAll("[data-moment]")];
-    const dots = [...scene.querySelectorAll("[data-dot]")];
-    // часы сцены: 06:00 → 02:30 следующего дня; каждой карточке — четверть прокрутки,
-    // после ночной карточки сцена сразу отпускает страницу
-    const SEG = [6, 10.25, 16.25, 22.75, 26.5];
+    const dots = [...scene.querySelectorAll("[data-goto]")];
+    const MOMENT_H = [7.5, 13, 19.5, 26];
+    const START = 6;
+    const END = 26.5;
     const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
     const SKY = [
       [6, "#f4d6df", "#fdeee6"],
@@ -322,14 +325,9 @@
       const mix = (x, y) => `rgb(${x.map((v, k) => Math.round(lerp(v, y[k], t))).join(",")})`;
       return [mix(a0, a1), mix(b0, b1)];
     };
+    const momentOf = (h) => (h < 10.25 ? 0 : h < 16.25 ? 1 : h < 22.75 ? 2 : 3);
     let active = -1;
-    updateScene = () => {
-      const r = scene.getBoundingClientRect();
-      const total = r.height - innerHeight;
-      const p = clamp(-r.top / total);
-      const seg = Math.min(3, Math.floor(p * 4));
-      const local = p * 4 - seg;
-      const h = lerp(SEG[seg], SEG[seg + 1], local);
+    const render = (h) => {
       const [top, bottom] = sky(h);
       const night = smooth(19, 21.2, h);
       scene.style.setProperty("--sky-top", top);
@@ -340,12 +338,50 @@
       moonG.style.transform = `rotate(${(clamp((h - 19.5) / 8) * 180).toFixed(2)}deg)`;
       const mins = Math.floor(((h % 24) * 60) / 10) * 10;
       timeEl.textContent = `${pad(Math.floor(mins / 60))}:${pad(mins % 60)}`;
-      if (seg !== active) {
-        active = seg;
-        moments.forEach((m, i) => m.classList.toggle("is-active", i === seg));
-        dots.forEach((d, i) => d.classList.toggle("is-active", i === seg));
+      const m = momentOf(h);
+      if (m !== active) {
+        active = m;
+        moments.forEach((el, i) => el.classList.toggle("is-active", i === m));
+        dots.forEach((b, i) => b.setAttribute("aria-pressed", String(i === m)));
       }
     };
+    // положение блока на экране → час: центр блока у нижней части экрана — утро, у верхней — ночь
+    const scrollHour = () => {
+      const r = scene.getBoundingClientRect();
+      const center = r.top + r.height / 2;
+      const p = clamp((innerHeight * 0.85 - center) / (innerHeight * 0.7));
+      return lerp(START, END, p);
+    };
+    let current = scrollHour();
+    let target = current;
+    let manual = null; // { hour, y }: выбор кнопкой держится, пока страницу не прокрутят заметно
+    let running = false;
+    const loop = () => {
+      const diff = target - current;
+      current = Math.abs(diff) < 0.01 ? target : current + diff * 0.14;
+      render(current);
+      if (current !== target) requestAnimationFrame(loop);
+      else running = false;
+    };
+    const go = () => {
+      if (!running) {
+        running = true;
+        requestAnimationFrame(loop);
+      }
+    };
+    dots.forEach((b, i) =>
+      b.addEventListener("click", () => {
+        manual = { hour: MOMENT_H[i], y: scrollY };
+        target = manual.hour;
+        go();
+      })
+    );
+    updateScene = () => {
+      if (manual && Math.abs(scrollY - manual.y) > innerHeight * 0.12) manual = null;
+      target = manual ? manual.hour : scrollHour();
+      go();
+    };
+    render(current);
   }
 
   /* ---------- Бегущая строка: быстрее при прокрутке, направление — за прокруткой ---------- */

@@ -63,7 +63,8 @@ export default {
 
   scene: {
     title: "Sizga qulay vaqtda keling",
-    lede: "Sutkani varaqlang: klinika ertalab ham, tunda ham oldindan yozilish orqali qabul qiladi.",
+    lede: "Sahifani varaqlang yoki vaqtni bosing: klinika ertalab ham, tunda ham oldindan yozilish orqali qabul qiladi.",
+    pick: "Sutka vaqtini tanlash",
     moments: [
       { time: "07:30", icon: "sunrise", t: "Ishdan oldin", d: "Erta tongga yoziling va ishga ulguring." },
       { time: "13:00", icon: "sun", t: "Tushlik tanaffusida", d: "Tanaffus paytida konsultatsiya yoki koʻrik." },

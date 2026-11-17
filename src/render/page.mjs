@@ -215,15 +215,15 @@ function dayScene(d) {
           .join("")}</ol>
         <a class="btn btn-accent" href="#book">${esc(s.cta)}<span class="btn-arrow">${icons.arrow}</span></a>
       </div>
-      <div class="day-stage" aria-hidden="true">
-        <svg class="day-svg" viewBox="0 0 600 340">
+      <div class="day-stage">
+        <svg class="day-svg" viewBox="0 0 600 340" aria-hidden="true" focusable="false">
           <path class="day-arc" d="M40 300A260 260 0 0 1 560 300"/>
           <g class="day-body" data-day-sun><circle class="day-halo" cx="40" cy="300" r="34"/><circle class="day-sun" cx="40" cy="300" r="16"/></g>
           <g class="day-body" data-day-moon><path class="day-moon" d="M44 284a17 17 0 1 0 8 26 13 13 0 1 1-8-26Z"/></g>
           <line class="day-horizon" x1="0" y1="300" x2="600" y2="300"/>
           <g class="day-skyline"><path d="M0 300V262h34v-18h40v18h30v-34h46v34h22v-24h50v24h28v-40h44v40h36v-22h46v22h30v-30h52v30h40v-16h38v16h44v-26h20v64Z"/><g class="day-windows"><rect x="44" y="252" width="6" height="8" rx="1"/><rect x="58" y="252" width="6" height="8" rx="1"/><rect x="112" y="240" width="6" height="8" rx="1"/><rect x="126" y="240" width="6" height="8" rx="1"/><rect x="112" y="254" width="6" height="8" rx="1"/><rect x="170" y="262" width="6" height="8" rx="1"/><rect x="222" y="240" width="6" height="8" rx="1"/><rect x="236" y="240" width="6" height="8" rx="1"/><rect x="222" y="254" width="6" height="8" rx="1"/><rect x="304" y="268" width="6" height="8" rx="1"/><rect x="332" y="252" width="6" height="8" rx="1"/><rect x="346" y="252" width="6" height="8" rx="1"/><rect x="332" y="266" width="6" height="8" rx="1"/><rect x="410" y="256" width="6" height="8" rx="1"/><rect x="424" y="256" width="6" height="8" rx="1"/><rect x="468" y="262" width="6" height="8" rx="1"/><rect x="482" y="262" width="6" height="8" rx="1"/><rect x="522" y="276" width="6" height="8" rx="1"/><rect x="560" y="264" width="6" height="8" rx="1"/></g></g>
         </svg>
-        <ol class="day-dots">${s.moments.map((m, i) => `<li data-dot="${i}"${i === 0 ? ' class="is-active"' : ""}><span>${esc(m.time)}</span></li>`).join("")}</ol>
+        <div class="day-dots" role="group" aria-label="${esc(s.pick)}">${s.moments.map((m, i) => `<button type="button" class="day-dot" data-goto="${i}" aria-pressed="${i === 0}"><span>${esc(m.time)}</span></button>`).join("")}</div>
       </div>
     </div>
   </div>
