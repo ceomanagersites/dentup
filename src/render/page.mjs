@@ -66,13 +66,13 @@ function header(d, base) {
   return `<div class="progress" aria-hidden="true"><span data-progress></span></div>
 <header class="hdr" data-hdr>
   <div class="hdr-in wrap">
-    <a class="logo" href="${base}${d.path}#top" aria-label="Dent Up">${logoMark}<span class="logo-word">Dent Up</span></a>
+    <a class="logo" href="#top" aria-label="Dent Up">${logoMark}<span class="logo-word">Dent Up</span></a>
     <nav class="hdr-nav" aria-label="${esc(d.menu.open)}"><ul>${nav}</ul></nav>
     <div class="hdr-tools">
       <button class="icon-btn theme-btn" type="button" data-theme-toggle data-to-day="${esc(d.theme.toDay)}" data-to-night="${esc(d.theme.toNight)}" aria-label="${esc(d.theme.toNight)}">
         <span class="theme-ico theme-ico-sun">${icons.sun}</span><span class="theme-ico theme-ico-moon">${icons.moon}</span>
       </button>
-      <a class="lang-link" href="${base}${d.other.path}" hreflang="${d.other.lang}" lang="${d.other.lang}" data-lang-link aria-label="${esc(d.langSwitch)}">${d.other.short}</a>
+      <a class="lang-link" href="${d.other.path}" hreflang="${d.other.lang}" lang="${d.other.lang}" data-lang-link aria-label="${esc(d.langSwitch)}">${d.other.short}</a>
       <a class="hdr-phone" href="${telHref(mainPhone)}" data-track="phone">${icons.phone}<span>${esc(mainPhone.display)}</span></a>
       <button class="icon-btn menu-btn" type="button" data-menu-open aria-label="${esc(d.menu.open)}" aria-haspopup="dialog">${icons.menu}</button>
     </div>
@@ -83,7 +83,7 @@ function header(d, base) {
   <ul class="menu-list">${d.nav.map((n) => `<li><a href="#${n.id}" data-menu-link>${esc(n.label)}</a></li>`).join("")}</ul>
   <div class="menu-foot">
     <a class="btn btn-accent" href="${telHref(mainPhone)}">${icons.phone}<span>${esc(mainPhone.display)}</span></a>
-    <a class="lang-link" href="${base}${d.other.path}" hreflang="${d.other.lang}" lang="${d.other.lang}" data-lang-link>${esc(d.other.label)}</a>
+    <a class="lang-link" href="${d.other.path}" hreflang="${d.other.lang}" lang="${d.other.lang}" data-lang-link>${esc(d.other.label)}</a>
   </div>
 </dialog>`;
 }
@@ -488,7 +488,7 @@ function footer(d, base) {
       <li><a href="${igLink(business.instagram)}" target="_blank" rel="noopener">${icons.instagram}<span>Instagram</span></a></li>
       <li><a href="https://t.me/${business.telegramChannel}" target="_blank" rel="noopener">${icons.telegram}<span>Telegram</span></a></li>
       <li><a href="${business.links.gis}" target="_blank" rel="noopener">${icons.pin}<span>2GIS</span></a></li>
-      <li><a href="${base}${d.other.path}" hreflang="${d.other.lang}" lang="${d.other.lang}" data-lang-link>${icons.chat}<span>${esc(d.other.label)}</span></a></li>
+      <li><a href="${d.other.path}" hreflang="${d.other.lang}" lang="${d.other.lang}" data-lang-link>${icons.chat}<span>${esc(d.other.label)}</span></a></li>
     </ul>
     <div class="ftr-legal">
       <p class="ftr-warning">${tx(f.warning, L)}</p>

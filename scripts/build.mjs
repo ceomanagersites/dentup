@@ -79,7 +79,35 @@ if (site.indexable) {
   );
 }
 
-/* 4. Шаблоны картинок для соцсетей (не публикуются, их снимает scripts/og.mjs) */
+/* 4. Ссылки страниц не выходят за папку сайта и ведут на существующие файлы.
+   Сайт может жить в подпапке (черновик на GitHub Pages — /dentup/): ссылка «../../» локально работает,
+   а там уводит на чужой адрес. Проверяем так, будто сайт лежит в /sub/. 404.html собирается с абсолютными
+   путями от SITE_URL и здесь не проверяется. */
+{
+  const base = "https://site.test/sub/";
+  const bad = [];
+  for (const page of ["index.html", "uz/index.html"]) {
+    const html = readFileSync(join(out, page), "utf8");
+    const pageUrl = new URL(page.replace(/index\.html$/, ""), base);
+    for (const [, ref] of html.matchAll(/(?:href|src)="([^"#][^"]*)"/g)) {
+      if (/^(https?:|mailto:|tel:|data:)/.test(ref)) continue;
+      const u = new URL(ref, pageUrl);
+      if (!u.pathname.startsWith("/sub/")) {
+        bad.push(`${page}: ${ref} — выходит за папку сайта`);
+        continue;
+      }
+      let local = decodeURIComponent(u.pathname.slice("/sub/".length));
+      if (local === "" || local.endsWith("/")) local += "index.html";
+      if (!existsSync(join(out, local))) bad.push(`${page}: ${ref} — нет файла ${local}`);
+    }
+  }
+  if (bad.length) {
+    console.error("Неверные ссылки:\n" + [...new Set(bad)].join("\n"));
+    process.exit(1);
+  }
+}
+
+/* 5. Шаблоны картинок для соцсетей (не публикуются, их снимает scripts/og.mjs) */
 const ogDir = join(root, "build", "og");
 mkdirSync(ogDir, { recursive: true });
 for (const d of [ru, uz]) {
