@@ -298,8 +298,9 @@
     const moonG = scene.querySelector("[data-day-moon]");
     const moments = [...scene.querySelectorAll("[data-moment]")];
     const dots = [...scene.querySelectorAll("[data-dot]")];
-    // часы сцены: 06:00 → 04:00 следующего дня; каждой карточке — четверть прокрутки
-    const SEG = [6, 10.25, 16.25, 22.75, 28];
+    // часы сцены: 06:00 → 02:30 следующего дня; каждой карточке — четверть прокрутки,
+    // после ночной карточки сцена сразу отпускает страницу
+    const SEG = [6, 10.25, 16.25, 22.75, 26.5];
     const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
     const SKY = [
       [6, "#f4d6df", "#fdeee6"],
@@ -336,7 +337,7 @@
       scene.style.setProperty("--night", night.toFixed(3));
       scene.classList.toggle("is-dark", night > 0.5);
       sunG.style.transform = `rotate(${(clamp((h - 6) / 14) * 180).toFixed(2)}deg)`;
-      moonG.style.transform = `rotate(${(clamp((h - 19.5) / 8.5) * 180).toFixed(2)}deg)`;
+      moonG.style.transform = `rotate(${(clamp((h - 19.5) / 8) * 180).toFixed(2)}deg)`;
       const mins = Math.floor(((h % 24) * 60) / 10) * 10;
       timeEl.textContent = `${pad(Math.floor(mins / 60))}:${pad(mins % 60)}`;
       if (seg !== active) {

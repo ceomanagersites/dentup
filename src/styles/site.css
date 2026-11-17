@@ -1234,7 +1234,13 @@ p {
   padding-block: var(--section);
 }
 .day.is-live {
-  height: 420vh;
+  /* сцена держит прокрутку около полутора экранов: сутки проходят быстро, страница не «залипает» */
+  height: 260vh;
+}
+@media (max-width: 900px) {
+  .day.is-live {
+    height: 240vh;
+  }
 }
 .day.is-live .day-sticky {
   position: sticky;
