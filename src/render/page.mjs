@@ -126,6 +126,42 @@ function marquee(d) {
 </div>`;
 }
 
+// Фото клиники: увеличены и обработаны локально (README, «Фотографии»). Нажатие открывает фото крупно.
+function photoSet(base, name, sizes) {
+  return {
+    src: `${base}img/${name}-800.webp`,
+    srcset: `${base}img/${name}-800.webp 800w, ${base}img/${name}-1600.webp 1600w`,
+    big: `${base}img/${name}-1600.webp`,
+    sizes,
+  };
+}
+
+function clinic(d, base) {
+  const c = d.clinic;
+  const L = d.lang;
+  const fig = (ph, i) => {
+    const set = photoSet(base, ph.src, i === 0 ? "(max-width: 760px) 100vw, 56vw" : "(max-width: 760px) 100vw, 40vw");
+    return `<figure class="photo photo-${ph.src}" data-reveal style="--reveal-delay:${i * 140}ms">
+      <button class="photo-btn" type="button" data-zoom="${set.big}" data-alt="${esc(ph.alt)}" aria-label="${esc(c.zoom)}: ${esc(ph.cap)}">
+        <img src="${set.src}" srcset="${set.srcset}" sizes="${set.sizes}" width="1600" height="2133" alt="${esc(ph.alt)}" loading="lazy" decoding="async">
+      </button>
+      <figcaption class="photo-cap">${ic(i === 0 ? "implant" : "home", 16)}<span>${esc(ph.cap)}</span></figcaption>
+    </figure>`;
+  };
+  return `<section class="clinic section" id="clinic" aria-labelledby="clinic-title">
+  <div class="wrap">
+    <div class="clinic-head">
+      <div>
+        <h2 class="h2" id="clinic-title" data-reveal="mask"><span class="mask-in">${tx(c.title, L)}</span></h2>
+        <p class="lede" data-reveal>${tx(c.lede, L)}</p>
+      </div>
+      <ul class="clinic-facts">${c.facts.map((f, i) => `<li data-reveal style="--reveal-delay:${i * 70}ms"><span class="cf-ic">${ic(f.icon, 18)}</span>${tx(f.t, L)}</li>`).join("")}</ul>
+    </div>
+    <div class="clinic-photos">${c.photos.map(fig).join("")}</div>
+  </div>
+</section>`;
+}
+
 function services(d) {
   const s = d.services;
   const L = d.lang;
@@ -408,7 +444,7 @@ function faq(d) {
 </section>`;
 }
 
-function visit(d) {
+function visit(d, base) {
   const v = d.visit;
   const L = d.lang;
   const phones = business.phones
@@ -439,6 +475,13 @@ function visit(d) {
         </ul></div>
       </div>
     </div>
+    <div class="visit-media">
+    <figure class="visit-door" data-reveal>
+      <button class="photo-btn" type="button" data-zoom="${base}img/entrance-door-1200.webp" data-alt="${esc(v.door.alt)}" aria-label="${esc(d.clinic.zoom)}">
+        <img src="${base}img/entrance-door-600.webp" srcset="${base}img/entrance-door-600.webp 600w, ${base}img/entrance-door-1200.webp 1200w" sizes="(max-width: 960px) 100vw, 44vw" width="1200" height="900" alt="${esc(v.door.alt)}" loading="lazy" decoding="async">
+      </button>
+      <figcaption>${tx(v.door.cap, L)}</figcaption>
+    </figure>
     <div class="map" data-map data-src="${business.links.yandexWidget}" data-title="${esc(v.mapTitle)}" data-reveal>
       <div class="map-ph">
         <svg class="map-art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
@@ -450,6 +493,7 @@ function visit(d) {
         <button class="btn btn-ink" type="button" data-map-load>${icons.pin}<span>${esc(v.mapShow)}</span></button>
         <p class="map-note">${tx(v.mapNote, L)}</p>
       </div>
+    </div>
     </div>
   </div>
 </section>`;
@@ -548,16 +592,20 @@ ${header(d, base)}
 ${hero(d)}
 ${benefits(d)}
 ${marquee(d)}
+${clinic(d, base)}
 ${services(d)}
 ${dayScene(d)}
 ${book(d)}
 ${doctor(d)}
 ${kids(d)}
 ${faq(d)}
-${visit(d)}
+${visit(d, base)}
 ${finalCta(d)}
 </main>
 ${footer(d, base)}
+<dialog class="lightbox" data-lightbox aria-label="${esc(d.clinic.zoom)}">
+  <button class="icon-btn lightbox-close" type="button" data-lightbox-close aria-label="${esc(d.clinic.close)}">${icons.close}</button>
+</dialog>
 ${structuredData(d, site)}
 <script src="${base}assets/site.js?v=${site.version}" defer></script>
 </body>

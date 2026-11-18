@@ -17,6 +17,7 @@ export default {
   skip: "Asosiy qismga oʻtish",
 
   nav: [
+    { id: "clinic", label: "Klinika" },
     { id: "services", label: "Xizmatlar" },
     { id: "day", label: "Qabul vaqti" },
     { id: "doctor", label: "Shifokor" },
@@ -79,7 +80,7 @@ export default {
     steps: [
       { icon: "chat", t: "Yozing yoki qoʻngʻiroq qiling", d: "Telegram, WhatsApp yoki telefon orqali, istalgan vaqtda." },
       { icon: "calendar", t: "Vaqtni kelishib oling", d: "Tong, kun, kech yoki tun — oʻzingizga qulayini." },
-      { icon: "pin", t: "Keling", d: "Chilonzor 7-kvartal, 26-uy, birinchi qavat. Moʻljal — Oqtepa aylanasi." },
+      { icon: "pin", t: "Keling", d: "Chilonzor 7-kvartal, 26-uy, 51-xonadon, birinchi qavat. Moʻljal — Oqtepa aylanasi." },
     ],
     composer: {
       title: "Xabarni tayyorlang",
@@ -99,6 +100,22 @@ export default {
       call: "Qoʻngʻiroq qilish",
       hint: "Telegram tayyor matn bilan ochiladi. Xabar shifokorga sizdan boradi, javob oʻsha chatda keladi.",
     },
+  },
+
+  clinic: {
+    title: "Chilonzordagi klinika",
+    lede: "Birinchi qavatda koʻchadan alohida kirish, eshik tepasida DENT UP peshlavhasi. Eshikda ish tartibi yozilgan: har kuni, 24/7.",
+    facts: [
+      { icon: "home", t: "Koʻchadan kirish, birinchi qavat" },
+      { icon: "clock24", t: "Eshikda: har kuni, 24/7" },
+      { icon: "pin", t: "Moʻljal — Oqtepa aylanasi" },
+    ],
+    photos: [
+      { src: "room", cap: "Shifokor xonasi", alt: "Dent Up xonasi: stomatologik kreslo, uning ustidagi chiroq, javonlar va rakovina" },
+      { src: "entrance", cap: "Klinikaga kirish", alt: "Dent Up kirish joyi: shisha eshik ustida DENT UP peshlavhasi, eshikda «Ish tartibi: har kuni 24/7» yozuvi, zinapoyalar" },
+    ],
+    zoom: "Rasmni kattalashtirish",
+    close: "Rasmni yopish",
   },
 
   services: {
@@ -196,14 +213,14 @@ export default {
       },
       {
         q: "Sizni qanday topsa boʻladi?",
-        a: "Chilonzor, 7-kvartal, 26-uy, birinchi qavat. Moʻljal — Oqtepa aylanasi, eng yaqin metro — «Novza».",
+        a: "Chilonzor, 7-kvartal, 26-uy, 51-xonadon, birinchi qavat. Moʻljal — Oqtepa aylanasi, eng yaqin metro — «Novza».",
       },
     ],
   },
 
   visit: {
     title: "Bizni qanday topish mumkin",
-    address: "Chilonzor 7-kvartal, 26",
+    address: "Chilonzor 7-kvartal, 26-uy, 51-xonadon",
     addressMore: "1-qavat, Chilonzor tumani, Toshkent, 100096",
     landmark: "Moʻljal — Oqtepa aylanasi. Eng yaqin metro — «Novza».",
     rows: [
@@ -214,6 +231,7 @@ export default {
     routeYandex: "Yandex Xaritalar",
     routeGis: "2GIS",
     routeGoogle: "Google Maps",
+    door: { cap: "Kirish shunday koʻrinadi: shisha eshik ustida DENT UP peshlavhasi", alt: "Dent Up klinikasiga kirish: shisha eshik ustida DENT UP peshlavhasi" },
     mapShow: "Xaritani koʻrsatish",
     mapTitle: "Dent Up Yandex Xaritalarda",
     mapNote: "Xarita Yandexdan faqat bosilgandan keyin yuklanadi.",

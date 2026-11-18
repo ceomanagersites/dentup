@@ -263,6 +263,24 @@
     preset("[data-preset-time]", "time", "presetTime");
   }
 
+  /* ---------- Фото крупно ---------- */
+  const lightbox = document.querySelector("[data-lightbox]");
+  if (lightbox && typeof lightbox.showModal === "function") {
+    // картинка создаётся при первом открытии: пустой <img> в разметке считался бы битым
+    const img = document.createElement("img");
+    img.decoding = "async";
+    document.querySelectorAll("[data-zoom]").forEach((btn) =>
+      btn.addEventListener("click", () => {
+        if (!img.isConnected) lightbox.append(img);
+        img.src = btn.dataset.zoom;
+        img.alt = btn.dataset.alt || "";
+        lightbox.showModal();
+      })
+    );
+    lightbox.querySelector("[data-lightbox-close]").addEventListener("click", () => lightbox.close());
+    lightbox.addEventListener("click", (e) => e.target !== img && lightbox.close());
+  }
+
   /* ---------- Меню, язык, шапка, карта ---------- */
   const menu = document.querySelector("[data-menu]");
   const openBtn = document.querySelector("[data-menu-open]");
