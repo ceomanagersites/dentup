@@ -953,8 +953,9 @@ p {
   color: var(--accent-strong);
 }
 .clinic-photos {
+  /* фотографии одного размера: равные колонки, одна пропорция 3:4 */
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
   align-items: start;
 }
@@ -965,9 +966,6 @@ p {
   overflow: hidden;
   background: var(--surface-2);
   box-shadow: var(--shadow-lg);
-}
-.photo-entrance {
-  margin-top: 96px;
 }
 .photo-btn {
   display: block;
@@ -1016,19 +1014,27 @@ p {
     grid-template-columns: 1fr;
   }
 }
+/* на телефоне фото идут лентой, которую листают вбок */
 @media (max-width: 760px) {
   .clinic-photos {
-    grid-template-columns: 1fr;
-    gap: 14px;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 80%;
+    gap: 12px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 4px var(--gutter) 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
   }
-  .photo-entrance {
-    margin-top: 0;
+  .clinic-photos::-webkit-scrollbar {
+    display: none;
   }
   .photo {
     border-radius: 22px;
-  }
-  .photo img {
-    aspect-ratio: 4 / 5;
+    scroll-snap-align: start;
   }
 }
 
@@ -1888,10 +1894,24 @@ p {
   font: 400 clamp(4.5rem, 2.5rem + 8vw, 8.5rem) / 1 var(--font-display);
   color: var(--ink);
 }
+/* фото врача: вырезка на прозрачном фоне, студийный фон рисует сайт — голубой днём, глубокий синий ночью */
+.doctor-disc.has-photo {
+  background:
+    radial-gradient(60% 50% at 50% 34%, rgba(255, 255, 255, 0.85), transparent 70%),
+    radial-gradient(circle at 50% 40%, #cfe7fa 0%, #a9d5f5 45%, #6aa8dc 100%);
+}
+:root[data-theme="night"] .doctor-disc.has-photo {
+  background:
+    radial-gradient(60% 50% at 50% 34%, rgba(169, 213, 245, 0.35), transparent 70%),
+    radial-gradient(circle at 50% 40%, #2b5584 0%, #1a355a 55%, #0f2038 100%);
+}
 .doctor-photo {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 0%;
 }
 .doctor-sun {
   position: absolute;
@@ -2006,6 +2026,114 @@ p {
   }
   .stat:last-child {
     grid-column: 1 / -1;
+  }
+}
+
+/* ---------- 11б. До и после ---------- */
+.case-list {
+  display: grid;
+  gap: 20px;
+}
+.case {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.6fr);
+  gap: clamp(20px, 3vw, 40px);
+  align-items: center;
+  padding: clamp(18px, 2.4vw, 28px);
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.case-text {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+.case-ic {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+.case-t {
+  font: 400 clamp(1.4rem, 1.1rem + 1vw, 1.9rem) / 1.15 var(--font-display);
+}
+.case-text p {
+  color: var(--muted);
+}
+.case-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.case-shot {
+  position: relative;
+  margin: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.case-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: scale 900ms var(--ease-out);
+}
+.case-caries .case-shot img {
+  aspect-ratio: 1 / 1;
+}
+.case-xray .case-shot img {
+  aspect-ratio: 3 / 2;
+}
+@media (hover: hover) and (pointer: fine) {
+  .case-shot .photo-btn:hover img {
+    scale: 1.04;
+  }
+}
+.case-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: rgba(11, 20, 36, 0.6);
+  color: #eef5fb;
+  font-size: 0.82rem;
+  font-weight: 800;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+.case-label.is-after {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.case-note {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+@media (max-width: 900px) {
+  .case {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .case-pair {
+    gap: 8px;
+  }
+  .case-shot {
+    border-radius: 14px;
+  }
+  .case-label {
+    top: 8px;
+    left: 8px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
   }
 }
 
@@ -2774,6 +2902,16 @@ p {
       scale: 1.035;
       transition: scale 900ms var(--ease-out);
     }
+  }
+  /* врач мягко поднимается в круге, когда блок появляется */
+  .js .doctor-plate[data-reveal] .doctor-photo {
+    translate: 0 8%;
+    opacity: 0;
+    transition: translate 1400ms var(--ease-out) 200ms, opacity 900ms ease 200ms;
+  }
+  .js .doctor-plate[data-reveal].is-visible .doctor-photo {
+    translate: none;
+    opacity: 1;
   }
   .js .tcard[data-reveal] .tsky-body {
     transform: rotate(calc(var(--deg) - 26deg));

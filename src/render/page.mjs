@@ -140,12 +140,12 @@ function clinic(d, base) {
   const c = d.clinic;
   const L = d.lang;
   const fig = (ph, i) => {
-    const set = photoSet(base, ph.src, i === 0 ? "(max-width: 760px) 100vw, 56vw" : "(max-width: 760px) 100vw, 40vw");
+    const set = photoSet(base, ph.src, "(max-width: 760px) 80vw, 32vw");
     return `<figure class="photo photo-${ph.src}" data-reveal style="--reveal-delay:${i * 140}ms">
       <button class="photo-btn" type="button" data-zoom="${set.big}" data-alt="${esc(ph.alt)}" aria-label="${esc(c.zoom)}: ${esc(ph.cap)}">
         <img src="${set.src}" srcset="${set.srcset}" sizes="${set.sizes}" width="1600" height="2133" alt="${esc(ph.alt)}" loading="lazy" decoding="async">
       </button>
-      <figcaption class="photo-cap">${ic(i === 0 ? "implant" : "home", 16)}<span>${esc(ph.cap)}</span></figcaption>
+      <figcaption class="photo-cap">${ic(ph.icon, 16)}<span>${esc(ph.cap)}</span></figcaption>
     </figure>`;
   };
   return `<section class="clinic section" id="clinic" aria-labelledby="clinic-title">
@@ -350,7 +350,7 @@ function book(d) {
 </section>`;
 }
 
-function doctor(d) {
+function doctor(d, base) {
   const doc = d.doctor;
   const L = d.lang;
   const initials = business.doctor.name.split(/\s+/).map((w) => w[0]).join("");
@@ -361,15 +361,16 @@ function doctor(d) {
     const [x1, y1] = p(r1), [x2, y2] = p(r2);
     return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
   }).join("");
-  const photo = business.doctor.photo
-    ? `<img class="doctor-photo" src="${business.doctor.photo}" alt="${esc(business.doctor.name)}" width="400" height="400" loading="lazy" decoding="async">`
+  const p = business.doctor.photo;
+  const photo = p
+    ? `<img class="doctor-photo" src="${base}img/${p}-800.webp" srcset="${base}img/${p}-400.webp 400w, ${base}img/${p}-800.webp 800w" sizes="(max-width: 900px) 76vw, 360px" alt="${esc(business.doctor.name)}" width="800" height="800" loading="lazy" decoding="async">`
     : `<span class="doctor-initials" aria-hidden="true">${esc(initials)}</span>`;
   const skillIcons = ["implant", "crown", "veneer", "extract"];
   return `<section class="doctor section" id="doctor" aria-labelledby="doctor-title">
   <div class="wrap doctor-in">
     <div class="doctor-plate" data-reveal>
       <svg class="doctor-ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false" data-spin>${ring}</svg>
-      <div class="doctor-disc">${photo}</div>
+      <div class="doctor-disc${p ? " has-photo" : ""}">${photo}</div>
       <span class="doctor-sun" aria-hidden="true"></span>
     </div>
     <div class="doctor-text">
@@ -392,6 +393,46 @@ function doctor(d) {
         <a class="btn btn-line" href="${igLink(business.instagramDoctor)}" target="_blank" rel="noopener">${icons.instagram}<span>${esc(doc.instagram)}</span></a>
       </div>
     </div>
+  </div>
+</section>`;
+}
+
+// До и после: пары одного размера, нажатие открывает снимок крупно.
+function cases(d, base) {
+  const c = d.cases;
+  const L = d.lang;
+  const sizes = { caries: [[500, 500], [1000, 1000]], xray: [[600, 400], [1200, 800]] };
+  const row = (it, i) => {
+    const [[sw, sh], [bw, bh]] = sizes[it.key];
+    const shots = it.shots
+      .map(
+        (sh_, k) => `<figure class="case-shot">
+          <button class="photo-btn" type="button" data-zoom="${base}img/${sh_.file}-${bw}.webp" data-alt="${esc(sh_.alt)}" aria-label="${esc(d.clinic.zoom)}: ${esc(sh_.label)}">
+            <img src="${base}img/${sh_.file}-${sw}.webp" srcset="${base}img/${sh_.file}-${sw}.webp ${sw}w, ${base}img/${sh_.file}-${bw}.webp ${bw}w" sizes="(max-width: 760px) 46vw, 30vw" width="${bw}" height="${bh}" alt="${esc(sh_.alt)}" loading="lazy" decoding="async">
+          </button>
+          <figcaption class="case-label${k === 1 ? " is-after" : ""}">${esc(sh_.label)}</figcaption>
+        </figure>`
+      )
+      .join("");
+    return `<li class="case case-${it.key}" data-reveal style="--reveal-delay:${i * 100}ms">
+      <div class="case-text">
+        <span class="case-ic">${ic(it.icon, 22)}</span>
+        <h3 class="case-t">${tx(it.t, L)}</h3>
+        <p>${tx(it.d, L)}</p>
+      </div>
+      <div class="case-pair">${shots}</div>
+    </li>`;
+  };
+  return `<section class="cases section" id="cases" aria-labelledby="cases-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 class="h2" id="cases-title" data-reveal="mask"><span class="mask-in">${tx(c.title, L)}</span></h2>
+        <p class="lede" data-reveal>${tx(c.lede, L)}</p>
+      </div>
+    </div>
+    <ol class="case-list">${c.items.map(row).join("")}</ol>
+    <p class="case-note">${tx(c.note, L)}</p>
   </div>
 </section>`;
 }
@@ -596,7 +637,8 @@ ${clinic(d, base)}
 ${services(d)}
 ${dayScene(d)}
 ${book(d)}
-${doctor(d)}
+${doctor(d, base)}
+${cases(d, base)}
 ${kids(d)}
 ${faq(d)}
 ${visit(d, base)}

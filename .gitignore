@@ -4,3 +4,9 @@ node_modules/
 .claude/
 *.zip
 NOTES.md
+# оригиналы фото от клиента: не публикуем
+/*.HEIC
+/*.heic
+/IMG_*.JPG
+/IMG_*.jpg
+/photo_*.jpg

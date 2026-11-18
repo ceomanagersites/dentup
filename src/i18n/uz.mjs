@@ -111,8 +111,9 @@ export default {
       { icon: "pin", t: "Moʻljal — Oqtepa aylanasi" },
     ],
     photos: [
-      { src: "room", cap: "Shifokor xonasi", alt: "Dent Up xonasi: stomatologik kreslo, uning ustidagi chiroq, javonlar va rakovina" },
-      { src: "entrance", cap: "Klinikaga kirish", alt: "Dent Up kirish joyi: shisha eshik ustida DENT UP peshlavhasi, eshikda «Ish tartibi: har kuni 24/7» yozuvi, zinapoyalar" },
+      { src: "room", icon: "implant", cap: "Shifokor xonasi", alt: "Dent Up xonasi: deraza yonidagi stomatologik kreslo, marmar pol, shifokor stoli" },
+      { src: "hall", icon: "home", cap: "Kutish zali", alt: "Dent Up kutish zali: divan, administrator peshtaxtasi, qandil, marmar pol" },
+      { src: "entrance", icon: "pin", cap: "Klinikaga kirish", alt: "Dent Up kirish joyi: eshik ustida DENT UP peshlavhasi, koʻchadan zinapoyalar" },
     ],
     zoom: "Rasmni kattalashtirish",
     close: "Rasmni yopish",
@@ -167,6 +168,34 @@ export default {
     quoteSource: "Shifokorning Instagramidan, tarjima",
     instagram: "Shifokor ishlari Instagramda",
     telegram: "Shifokorga yozish",
+  },
+
+  cases: {
+    title: "Oldin va keyin",
+    lede: "Dent Up shifokorining ishlari. Har bir holat oʻziga xos: davolash rejasi va natija koʻrikka bogʻliq.",
+    items: [
+      {
+        key: "caries",
+        icon: "restore",
+        t: "Chaynov tishdagi kariesni davolash",
+        d: "Tish kofferdam bilan ajratilgan, karies olib tashlangan, tish shakli plomba bilan tiklangan.",
+        shots: [
+          { file: "case-caries-before", label: "Oldin", alt: "Kofferdam ostidagi kariesli chaynov tish, davolashdan oldin" },
+          { file: "case-caries-after", label: "Keyin", alt: "Oʻsha tish davolashdan keyin: shakli plomba bilan tiklangan" },
+        ],
+      },
+      {
+        key: "xray",
+        icon: "implant",
+        t: "Implantatsiya",
+        d: "Rentgen suratlari: implant yoʻnalishini tekshirish va oʻrnatilgan implantlar.",
+        shots: [
+          { file: "case-xray-before", label: "Jarayonda", alt: "Implantatsiya jarayonidagi rentgen: suyakdagi yoʻnaltiruvchi shtift" },
+          { file: "case-xray-after", label: "Keyin", alt: "Implantatsiyadan keyingi rentgen: oʻrnatilgan implantlar" },
+        ],
+      },
+    ],
+    note: "Suratlar shifokor amaliyotidan. Davolash natijasi klinik holatga bogʻliq.",
   },
 
   kids: {
