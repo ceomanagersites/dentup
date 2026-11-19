@@ -22,7 +22,6 @@ export const icons = {
   pin: svg('<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.3"/>'),
   arrow: svg('<path d="M5 12h14M13.5 6.5 19 12l-5.5 5.5"/>'),
   clock: svg('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'),
-  clock24: svg('<path d="M20.5 12A8.5 8.5 0 1 1 12 3.5c2.6 0 4.9 1.1 6.4 3"/><path d="M18.9 3.3v3.4h-3.4"/><path d="M12 7.8V12l2.6 1.6"/>'),
   calendar: svg('<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.5M8 17h2M12 17h2"/>'),
   chat: svg('<path d="M5 18.5 3.8 21l3.4-1.3A8.5 8.5 0 1 0 5 18.5Z"/><path d="M8.5 11h7M8.5 14h4.5"/>'),
   award: svg('<circle cx="12" cy="9" r="5.5"/><path d="m9 13.8-1.5 6.7L12 18l4.5 2.5-1.5-6.7"/><path d="m10 9 1.4 1.4L14.2 7.6"/>'),

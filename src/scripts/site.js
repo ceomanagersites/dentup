@@ -35,18 +35,26 @@
     const clock = dial.querySelector("[data-clock]");
     const caption = dial.querySelector("[data-clock-caption]");
     const status = dial.querySelector("[data-clock-status]");
+    const openAt = Number(dial.dataset.open);
+    const closeAt = Number(dial.dataset.close);
+    // «Открыто до 22:00» или «Закрыто, откроемся в 9:00» по времени Ташкента
+    const setStatus = (hours) => {
+      const isOpen = hours >= openAt && hours < closeAt;
+      status.textContent = isOpen ? status.dataset.live : status.dataset.closed;
+      dial.classList.toggle("is-closed", !isOpen);
+    };
     const place = (f) => {
       sun.style.transform = `rotate(${(f * 180).toFixed(2)}deg)`;
       progress.style.setProperty("--progress-offset", (1 - f).toFixed(4));
     };
     const now = () => {
       const { h, m } = tashkentNow();
-      return { f: (h + m / 60) / 24, text: `${pad(h)}:${pad(m)}` };
+      return { f: (h + m / 60) / 24, hours: h + m / 60, text: `${pad(h)}:${pad(m)}` };
     };
     const start = now();
     clock.textContent = start.text;
     caption.hidden = false;
-    status.textContent = status.dataset.live;
+    setStatus(start.hours);
     if (reduce) {
       place(start.f);
       sun.classList.add("is-on");
@@ -62,8 +70,9 @@
       requestAnimationFrame(step);
     }
     const tick = () => {
-      const { f, text } = now();
+      const { f, hours, text } = now();
       clock.textContent = text;
+      setStatus(hours);
       place(f);
     };
     const schedule = () =>

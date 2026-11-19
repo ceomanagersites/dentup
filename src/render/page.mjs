@@ -103,7 +103,7 @@ function hero(d) {
     </div>
     <a class="hero-rating" href="${business.links.gisReviews}" target="_blank" rel="noopener"><span class="stars" aria-hidden="true">${icons.star.repeat(5)}</span><span><b>${esc(h.rating)}</b> · ${esc(h.ratingNote)}</span></a>
   </div>
-  <div class="hero-dial wrap" data-parallax>${renderDial(h)}</div>
+  <div class="hero-dial wrap" data-parallax>${renderDial(h, business.hours)}</div>
 </section>`;
 }
 
@@ -329,7 +329,7 @@ function book(d) {
       <div class="chat-head">
         <span class="chat-ava" aria-hidden="true">${esc(initials)}<span class="chat-online"></span></span>
         <div class="chat-who"><p class="chat-name" lang="uz">${esc(business.doctor.name)}</p><p class="chat-sub">@${esc(business.telegram)} · ${esc(c.chatSub)}</p></div>
-        <span class="chat-status">${icons.clock24}<span>${esc(c.chatStatus)}</span></span>
+        <span class="chat-status">${icons.clock}<span>${esc(c.chatStatus)}</span></span>
       </div>
       <div class="chat-body">
         <div class="bubble" data-bubble><output class="bubble-text" data-msg aria-live="polite">${esc(c.greeting)}</output><span class="bubble-tail" aria-hidden="true"></span></div>
@@ -607,8 +607,8 @@ function structuredData(d, site) {
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        opens: "00:00",
-        closes: "23:59",
+        opens: business.hours.open,
+        closes: business.hours.close,
       },
     ],
     paymentAccepted: "Cash, Credit Card",
@@ -692,7 +692,7 @@ export function renderOg(d) {
     <div class="og-top"><span class="logo">${logoMark}<span class="logo-word">Dent Up</span></span><span class="og-phone">${esc(mainPhone.display)}</span></div>
     <p class="og-title">${d.hero.title.map((l) => tx(l, d.lang)).join("<br>")}</p>
     <p class="og-sub">${tx(d.visit.address, d.lang)}<br>${tx(d.visit.rows[0].v, d.lang)}</p>
-    <div class="og-dial">${renderDial(d.hero)}</div>
+    <div class="og-dial">${renderDial(d.hero, business.hours)}</div>
   </div>
 </body></html>`;
 }

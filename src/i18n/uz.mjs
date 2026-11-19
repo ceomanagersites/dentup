@@ -8,10 +8,10 @@ export default {
   other: { lang: "ru", label: "Русский", short: "RU", path: "../" },
 
   meta: {
-    title: "Dent Up — Chilonzordagi kecha-kunduz ishlaydigan stomatologiya, Toshkent",
+    title: "Dent Up — Chilonzordagi stomatologiya, Toshkent. Qabul 9:00 dan 22:00 gacha",
     description:
-      "Chilonzordagi Dent Up stomatologiyasi oldindan yozilish orqali kecha-kunduz qabul qiladi. Implantatsiya, tojlar, vinirlar, breketlar, bolalar tishlarini davolash. Konsultatsiya bepul. +998 88 878 87 88.",
-    ogAlt: "Dent Up — Chilonzordagi stomatologiya, kecha-kunduz qabul",
+      "Chilonzordagi Dent Up stomatologiyasi 9:00 dan 22:00 gacha qabul qiladi. Implantatsiya, kaplamalar, vinirlar, breketlar, bolalar tishlarini davolash. Konsultatsiya 100 000 soʻm. +998 88 878 87 88.",
+    ogAlt: "Dent Up — Chilonzordagi stomatologiya, qabul 9:00 dan 22:00 gacha",
   },
 
   skip: "Asosiy qismga oʻtish",
@@ -29,31 +29,31 @@ export default {
   langSwitch: "Сайт на русском",
 
   hero: {
-    badge: "Yozilish kecha-kunduz ochiq",
-    title: ["Hech qachon yopilmaydigan", "stomatologiya"],
-    lede: "Chilonzordagi Dent Up oldindan yozilish orqali sutkaning istalgan vaqtida qabul qiladi. Implantolog shifokordan implantatsiya, tojlar va vinirlar, bolalar tishlarini davolash.",
+    badge: "Qabul 9:00 dan 22:00 gacha",
+    title: ["Soat 22:00 gacha", "ochiq stomatologiya"],
+    lede: "Chilonzordagi Dent Up 9:00 dan 22:00 gacha qabul qiladi — ishdan oldin ham, keyin ham kelish mumkin. Implantolog shifokordan implantatsiya, kaplamalar va vinirlar, bolalar tishlarini davolash.",
     call: "Qoʻngʻiroq qilish",
     write: "Telegramda yozish",
     rating: "2GISda 5,0",
     ratingNote: "1 ta sharh",
     clockCaption: "Hozir Toshkentda",
-    clockStatic: "24/7",
-    status: "Yozilish ochiq",
-    statusStatic: "Kecha-kunduz, oldindan yozilish bilan",
-    parts: ["tun", "tong", "kun", "kech"],
-    dialLabel: "Sutka siferblati: klinika istalgan soatda oldindan yozilish orqali qabul qiladi",
+    clockStatic: "9–22",
+    status: "22:00 gacha ochiq",
+    statusClosed: "Yopiq, 9:00 da ochilamiz",
+    statusStatic: "Qabul 9:00 dan 22:00 gacha",
+    dialLabel: "Sutka siferblati: klinika 9:00 dan 22:00 gacha qabul qiladi",
   },
 
   benefits: [
-    { icon: "clock24", t: "Kecha-kunduz", d: "Istalgan soatda, hatto tunda ham oldindan yozilish orqali qabul qilamiz." },
-    { icon: "free", t: "Konsultatsiya bepul", d: "Shifokor koʻrikdan oʻtkazadi va davolashdan oldin narxini aytadi." },
-    { icon: "award", t: "Implantolog, PhD", d: "8 yillik tajriba: implantlar, tojlar, vinirlar." },
+    { icon: "clock", t: "22:00 gacha", d: "Qabul 9:00 dan 22:00 gacha: ishdan keyin ham ulgurasiz." },
+    { icon: "free", t: "Konsultatsiya 100 000 soʻm", d: "Shifokor koʻrikdan oʻtkazadi va davolashdan oldin narxini aytadi." },
+    { icon: "award", t: "Implantolog, PhD", d: "8 yillik tajriba: implantlar, kaplamalar, vinirlar." },
     { icon: "kid", t: "Bolalarni davolaymiz", d: "Bolalar stomatologi, ortodont, mikroskop ostida davolash." },
   ],
 
   marquee: [
     "Implantatsiya",
-    "Sirkoniy tojlar",
+    "Sirkoniy kaplamalar",
     "Keramik vinirlar",
     "Breketlar",
     "Tishlarni restavratsiya qilish",
@@ -64,12 +64,12 @@ export default {
 
   scene: {
     title: "Sizga qulay vaqtda keling",
-    lede: "Klinika sutkaning istalgan vaqtida oldindan yozilish orqali qabul qiladi. Qulay vaqtni tanlang — uni shifokorga xabarga qoʻshamiz.",
+    lede: "Klinika 9:00 dan 22:00 gacha qabul qiladi. Qulay vaqtni tanlang — uni shifokorga xabarga qoʻshamiz.",
     moments: [
-      { time: "07:30", chip: 1, icon: "sunrise", t: "Ishdan oldin", d: "Erta tongga yoziling va ishga ulguring." },
+      { time: "09:00", chip: 1, icon: "sunrise", t: "Ertalab", d: "Kun hali boʻsh paytda ertalabga yoziling." },
       { time: "13:00", chip: 2, icon: "sun", t: "Tushlik tanaffusida", d: "Tanaffus paytida konsultatsiya yoki koʻrik." },
-      { time: "19:30", chip: 3, icon: "sunset", t: "Ishdan keyin", d: "Ishdan javob soʻrashning hojati yoʻq: kechqurun keling." },
-      { time: "02:00", chip: 4, icon: "moon", t: "Tunda ogʻrisa", d: "Istalgan vaqtda qoʻngʻiroq qiling — qachon kelishni kelishib olamiz." },
+      { time: "18:30", chip: 3, icon: "sunset", t: "Ishdan keyin", d: "Ishdan javob soʻrashning hojati yoʻq: kechqurun keling." },
+      { time: "21:00", chip: 4, icon: "moon", t: "Kech kechqurun", d: "22:00 gacha ishlaymiz: uzoq ish kunidan keyin ham ulgurasiz." },
     ],
     cardCta: "Shu vaqtga yozilish",
   },
@@ -78,20 +78,20 @@ export default {
     title: "Bir daqiqada yozilish",
     lede: "Vaqt va nima bezovta qilayotganini tanlang — shifokorga xabar oʻzi tayyorlanadi. Faqat «Yuborish»ni bosish qoladi.",
     steps: [
-      { icon: "chat", t: "Yozing yoki qoʻngʻiroq qiling", d: "Telegram, WhatsApp yoki telefon orqali, istalgan vaqtda." },
-      { icon: "calendar", t: "Vaqtni kelishib oling", d: "Tong, kun, kech yoki tun — oʻzingizga qulayini." },
+      { icon: "chat", t: "Yozing yoki qoʻngʻiroq qiling", d: "Telegram, WhatsApp yoki telefon orqali." },
+      { icon: "calendar", t: "Vaqtni kelishib oling", d: "9:00 dan 22:00 gacha, oʻzingizga qulay vaqtda." },
       { icon: "pin", t: "Keling", d: "Chilonzor 7-kvartal, 26-uy, 51-xonadon, birinchi qavat. Moʻljal — Oqtepa aylanasi." },
     ],
     composer: {
       title: "Xabarni tayyorlang",
       timeLabel: "Qachon qulay",
-      times: ["Imkon qadar tezroq", "Ertalab", "Kunduzi", "Kechqurun", "Tunda"],
+      times: ["Imkon qadar tezroq", "Ertalab", "Kunduzi", "Kechqurun", "20:00 dan keyin"],
       timeIcons: ["bolt", "sunrise", "sun", "sunset", "moon"],
       topicLabel: "Nima bezovta qilyapti",
-      topics: ["Tish ogʻriyapti", "Implantatsiya", "Toj yoki vinir", "Breketlar", "Bolani davolash", "Konsultatsiya kerak"],
+      topics: ["Tish ogʻriyapti", "Implantatsiya", "Kaplama yoki vinir", "Breketlar", "Bolani davolash", "Konsultatsiya kerak"],
       topicIcons: ["bolt", "implant", "crown", "braces", "kid", "consult"],
       chatSub: "Shifokor Telegrami, yozilish",
-      chatStatus: "Yozilish kecha-kunduz",
+      chatStatus: "Qabul 9:00 dan 22:00 gacha",
       greeting: "Assalomu alaykum! Dent Up klinikasiga yozilmoqchiman.",
       topicPrefix: "Sabab:",
       timePrefix: "Qulay vaqt:",
@@ -104,10 +104,10 @@ export default {
 
   clinic: {
     title: "Chilonzordagi klinika",
-    lede: "Birinchi qavatda koʻchadan alohida kirish, eshik tepasida DENT UP peshlavhasi. Eshikda ish tartibi yozilgan: har kuni, 24/7.",
+    lede: "Birinchi qavatda koʻchadan alohida kirish, eshik tepasida DENT UP peshlavhasi. Qabul 9:00 dan 22:00 gacha.",
     facts: [
       { icon: "home", t: "Koʻchadan kirish, birinchi qavat" },
-      { icon: "clock24", t: "Eshikda: har kuni, 24/7" },
+      { icon: "clock", t: "Qabul 9:00 dan 22:00 gacha" },
       { icon: "pin", t: "Moʻljal — Oqtepa aylanasi" },
     ],
     photos: [
@@ -134,7 +134,7 @@ export default {
         feature: true,
         topic: 1,
       },
-      { icon: "crown", t: "Tojlar", d: "Sirkoniy va metallokeramika. Eski oltin tojlarni sirkoniy tojlarga almashtiramiz.", topic: 2 },
+      { icon: "crown", t: "Kaplamalar", d: "Sirkoniy va metallokeramik kaplamalar. Eski oltin kaplamalarni sirkoniy kaplamalarga almashtiramiz.", topic: 2 },
       { icon: "veneer", t: "Keramik vinirlar", d: "Old tishlarning shakli va rangini oʻzgartiradi.", topic: 2 },
       { icon: "restore", t: "Restavratsiya", d: "Old tishlarning shakli va rangini yorugʻlikda qotadigan kompozit bilan tiklaymiz.", topic: 5 },
       { icon: "braces", t: "Breketlar", d: "Ortodont kattalarda tishlam va tishlar holatini toʻgʻrilaydi.", topic: 3 },
@@ -150,7 +150,7 @@ export default {
     kidsTile: { t: "Bolalarga", d: "Sut va doimiy tishlarni davolash, mikroskop, bolalar ortodonti.", cta: "Koʻrish" },
     consult: {
       t: "Nimadan boshlashni bilmayapsizmi?",
-      d: "Bepul konsultatsiyaga keling: shifokor koʻrikdan oʻtkazadi, variantlarni tushuntiradi va narxini aytadi.",
+      d: "Konsultatsiya narxi 100 000 soʻm: shifokor koʻrikdan oʻtkazadi, variantlarni tushuntiradi va davolash narxini aytadi.",
       cta: "Konsultatsiyaga yozilish",
     },
   },
@@ -161,9 +161,9 @@ export default {
     stats: [
       { n: "8", u: "yil", l: "tajriba" },
       { n: "PhD", u: "", l: "ilmiy daraja" },
-      { n: "24/7", u: "", l: "yozilish" },
+      { n: "9–22", u: "", l: "qabul soatlari" },
     ],
-    skills: ["Implantatsiya", "Tojlar", "Vinirlar", "Tish olib tashlash"],
+    skills: ["Implantatsiya", "Kaplamalar", "Vinirlar", "Tish olib tashlash"],
     quote: "Estetika — bu shunchaki oq va tekis tishlar emas, balki uygʻunlik.",
     quoteSource: "Shifokorning Instagramidan, tarjima",
     instagram: "Shifokor ishlari Instagramda",
@@ -217,12 +217,12 @@ export default {
     },
     items: [
       {
-        q: "Tunda kelsa boʻladimi?",
-        a: "Ha. Klinika kecha-kunduz ishlaydi, lekin oldindan yozilish orqali. Qoʻngʻiroq qiling yoki yozing — vaqtni kelishib olamiz.",
+        q: "Soat nechagacha ishlaysiz?",
+        a: "Klinika 9:00 dan 22:00 gacha qabul qiladi. Qoʻngʻiroq qiling yoki yozing — qabul vaqtini kelishib olamiz.",
       },
       {
         q: "Davolash qancha turadi?",
-        a: "Narxni shifokor koʻrikdan soʻng aytadi: u nechta tish va qanday ish kerakligiga bogʻliq. Konsultatsiya bepul.",
+        a: "Davolash narxini shifokor koʻrikdan soʻng aytadi: u nechta tish va qanday ish kerakligiga bogʻliq. Konsultatsiya narxi 100 000 soʻm.",
       },
       {
         q: "Ogʻriqli boʻladimi?",
@@ -253,7 +253,7 @@ export default {
     addressMore: "1-qavat, Chilonzor tumani, Toshkent, 100096",
     landmark: "Moʻljal — Oqtepa aylanasi. Eng yaqin metro — «Novza».",
     rows: [
-      { icon: "clock24", k: "Ish vaqti", v: "Kecha-kunduz, oldindan yozilish bilan" },
+      { icon: "clock", k: "Ish vaqti", v: "9:00 dan 22:00 gacha" },
       { icon: "card", k: "Toʻlov", v: "Karta, naqd pul, kartadan oʻtkazma" },
     ],
     routes: "Yoʻnalish qurish",
@@ -272,14 +272,14 @@ export default {
   },
 
   final: {
-    title: "Istalgan vaqtda qoʻngʻiroq qiling",
+    title: "9:00 dan 22:00 gacha qoʻngʻiroq qiling",
     lede: "Nima bezovta qilayotganini ayting — qabul vaqtini kelishib olamiz.",
     call: "Qoʻngʻiroq qilish",
     write: "Telegramda yozish",
   },
 
   footer: {
-    about: "Chilonzordagi stomatologiya, Toshkent. Kecha-kunduz, oldindan yozilish bilan.",
+    about: "Chilonzordagi stomatologiya, Toshkent. Qabul 9:00 dan 22:00 gacha.",
     warning: "Qarshi koʻrsatmalar mavjud. Mutaxassis maslahati zarur.",
     note: "Saytdagi maʼlumotlar shifokor koʻrigining oʻrnini bosmaydi.",
     top: "Yuqoriga",
@@ -289,7 +289,7 @@ export default {
 
   notFound: {
     title: "Bunday sahifa yoʻq",
-    text: "Havola eskirgan boʻlishi mumkin. Klinika haqida hammasi bosh sahifada, yozilish esa istalgan vaqtda telefon orqali.",
+    text: "Havola eskirgan boʻlishi mumkin. Klinika haqida hammasi bosh sahifada, yozilish esa telefon orqali, 9:00 dan 22:00 gacha.",
     home: "Bosh sahifaga",
   },
 };
