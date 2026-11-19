@@ -10,8 +10,8 @@ export default {
   meta: {
     title: "Dent Up — Chilonzordagi stomatologiya, Toshkent. Qabul 9:00 dan 22:00 gacha",
     description:
-      "Chilonzordagi Dent Up stomatologiyasi 9:00 dan 22:00 gacha qabul qiladi. Implantatsiya, kaplamalar, vinirlar, breketlar, bolalar tishlarini davolash. Konsultatsiya 100 000 soʻm. +998 88 878 87 88.",
-    ogAlt: "Dent Up — Chilonzordagi stomatologiya, qabul 9:00 dan 22:00 gacha",
+      "Chilonzordagi Dent Up stomatologiyasi har kuni 9:00 dan 22:00 gacha qabul qiladi. Implantatsiya, kaplamalar, vinirlar, breketlar, bolalar tishlarini davolash. Konsultatsiya 100 000 soʻm. +998 88 878 87 88.",
+    ogAlt: "Dent Up — Chilonzordagi stomatologiya, har kuni 9:00 dan 22:00 gacha",
   },
 
   skip: "Asosiy qismga oʻtish",
@@ -29,7 +29,7 @@ export default {
   langSwitch: "Сайт на русском",
 
   hero: {
-    badge: "Qabul 9:00 dan 22:00 gacha",
+    badge: "Har kuni 9:00 dan 22:00 gacha",
     title: ["Soat 22:00 gacha", "ochiq stomatologiya"],
     lede: "Chilonzordagi Dent Up 9:00 dan 22:00 gacha qabul qiladi — ishdan oldin ham, keyin ham kelish mumkin. Implantolog shifokordan implantatsiya, kaplamalar va vinirlar, bolalar tishlarini davolash.",
     call: "Qoʻngʻiroq qilish",
@@ -40,12 +40,12 @@ export default {
     clockStatic: "9–22",
     status: "22:00 gacha ochiq",
     statusClosed: "Yopiq, 9:00 da ochilamiz",
-    statusStatic: "Qabul 9:00 dan 22:00 gacha",
-    dialLabel: "Sutka siferblati: klinika 9:00 dan 22:00 gacha qabul qiladi",
+    statusStatic: "Har kuni 9:00 dan 22:00 gacha",
+    dialLabel: "Sutka siferblati: klinika har kuni 9:00 dan 22:00 gacha qabul qiladi",
   },
 
   benefits: [
-    { icon: "clock", t: "22:00 gacha", d: "Qabul 9:00 dan 22:00 gacha: ishdan keyin ham ulgurasiz." },
+    { icon: "clock", t: "22:00 gacha", d: "Har kuni, dam olish kunlarisiz 9:00 dan 22:00 gacha: ishdan keyin ham ulgurasiz." },
     { icon: "free", t: "Konsultatsiya 100 000 soʻm", d: "Shifokor koʻrikdan oʻtkazadi va davolashdan oldin narxini aytadi." },
     { icon: "award", t: "Implantolog, PhD", d: "8 yillik tajriba: implantlar, kaplamalar, vinirlar." },
     { icon: "kid", t: "Bolalarni davolaymiz", d: "Bolalar stomatologi, ortodont, mikroskop ostida davolash." },
@@ -64,7 +64,7 @@ export default {
 
   scene: {
     title: "Sizga qulay vaqtda keling",
-    lede: "Klinika 9:00 dan 22:00 gacha qabul qiladi. Qulay vaqtni tanlang — uni shifokorga xabarga qoʻshamiz.",
+    lede: "Klinika har kuni 9:00 dan 22:00 gacha qabul qiladi. Qulay vaqtni tanlang — uni shifokorga xabarga qoʻshamiz.",
     moments: [
       { time: "09:00", chip: 1, icon: "sunrise", t: "Ertalab", d: "Kun hali boʻsh paytda ertalabga yoziling." },
       { time: "13:00", chip: 2, icon: "sun", t: "Tushlik tanaffusida", d: "Tanaffus paytida konsultatsiya yoki koʻrik." },
@@ -91,7 +91,7 @@ export default {
       topics: ["Tish ogʻriyapti", "Implantatsiya", "Kaplama yoki vinir", "Breketlar", "Bolani davolash", "Konsultatsiya kerak"],
       topicIcons: ["bolt", "implant", "crown", "braces", "kid", "consult"],
       chatSub: "Shifokor Telegrami, yozilish",
-      chatStatus: "Qabul 9:00 dan 22:00 gacha",
+      chatStatus: "Har kuni 9:00–22:00",
       greeting: "Assalomu alaykum! Dent Up klinikasiga yozilmoqchiman.",
       topicPrefix: "Sabab:",
       timePrefix: "Qulay vaqt:",
@@ -107,7 +107,7 @@ export default {
     lede: "Birinchi qavatda koʻchadan alohida kirish, eshik tepasida DENT UP peshlavhasi. Qabul 9:00 dan 22:00 gacha.",
     facts: [
       { icon: "home", t: "Koʻchadan kirish, birinchi qavat" },
-      { icon: "clock", t: "Qabul 9:00 dan 22:00 gacha" },
+      { icon: "clock", t: "Har kuni 9:00 dan 22:00 gacha" },
       { icon: "pin", t: "Moʻljal — Oqtepa aylanasi" },
     ],
     photos: [
@@ -218,7 +218,7 @@ export default {
     items: [
       {
         q: "Soat nechagacha ishlaysiz?",
-        a: "Klinika 9:00 dan 22:00 gacha qabul qiladi. Qoʻngʻiroq qiling yoki yozing — qabul vaqtini kelishib olamiz.",
+        a: "Klinika har kuni, dam olish kunlarisiz, 9:00 dan 22:00 gacha qabul qiladi. Qoʻngʻiroq qiling yoki yozing — qabul vaqtini kelishib olamiz.",
       },
       {
         q: "Davolash qancha turadi?",
@@ -253,7 +253,7 @@ export default {
     addressMore: "1-qavat, Chilonzor tumani, Toshkent, 100096",
     landmark: "Moʻljal — Oqtepa aylanasi. Eng yaqin metro — «Novza».",
     rows: [
-      { icon: "clock", k: "Ish vaqti", v: "9:00 dan 22:00 gacha" },
+      { icon: "clock", k: "Ish vaqti", v: "Har kuni, 9:00 dan 22:00 gacha" },
       { icon: "card", k: "Toʻlov", v: "Karta, naqd pul, kartadan oʻtkazma" },
     ],
     routes: "Yoʻnalish qurish",
@@ -279,7 +279,7 @@ export default {
   },
 
   footer: {
-    about: "Chilonzordagi stomatologiya, Toshkent. Qabul 9:00 dan 22:00 gacha.",
+    about: "Chilonzordagi stomatologiya, Toshkent. Har kuni 9:00 dan 22:00 gacha.",
     warning: "Qarshi koʻrsatmalar mavjud. Mutaxassis maslahati zarur.",
     note: "Saytdagi maʼlumotlar shifokor koʻrigining oʻrnini bosmaydi.",
     top: "Yuqoriga",
